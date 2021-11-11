@@ -11,5 +11,15 @@ Install the package with **remotes** as follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("sdca/sdca-package")
+remotes::install_github("SDCA-tool/sdca-package")
+```
+
+## Use
+
+``` r
+library(sdca)
+test_function(5)
+# 25
+test_function_fail(5)
+# Error in test_function_fail(5) : This function will fail
 ```
