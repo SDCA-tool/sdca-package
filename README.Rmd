@@ -1,5 +1,18 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
 
 # SDCA
 
@@ -9,7 +22,8 @@ The R Package for the SDCA Project
 
 Install the package with **remotes** as follows:
 
-``` r
+```{r install, eval=FALSE}
 install.packages("remotes")
 remotes::install_github("sdca/sdca-package")
 ```
+
