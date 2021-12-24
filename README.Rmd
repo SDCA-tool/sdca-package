@@ -20,6 +20,10 @@ The R Package for the SDCA Project
 
 ## Installation
 
+Ensure you have system dependencies:
+
+```sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev```
+
 Install the package with **remotes** as follows:
 
 ```{r install, eval=FALSE}
