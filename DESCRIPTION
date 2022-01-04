@@ -1,6 +1,6 @@
 Package: sdca
 Type: Package
-Title: Sahred Digital Carbon Architecture 
+Title: Shared Digital Carbon Architecture 
 Version: 0.1.0
 Authors@R: c(
     person("Malcolm", "Morgan", email = "m.morgan1@leeds.ac.uk", role = c("aut","cre"), 
@@ -8,7 +8,7 @@ Authors@R: c(
     )
 Maintainer: Malcolm Morgan <m.morgan1@leeds.ac.uk>
 Description: Package for the SDCA project.
-    It contains the caculations used by the tool.
+    It contains the calculations used by the tool.
 Language: EN-GB
 License: file LICENSE
 URL: https://github.com/sdca/sdca-package
@@ -16,10 +16,11 @@ BugReports: https://github.com/sdca/sdca-package/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
-    usethis,
-    devtools,
-    goodpractice
-RoxygenNote: 7.1.1
+    sf,
+    dplyr,
+    RcppSimdJson,
+    jsonlite
+RoxygenNote: 7.1.2
 Suggests: 
     covr,
     knitr,
