@@ -33,11 +33,30 @@ process_results = function(args) {
   netzero_compatiable <- "yes"
   comments <- "Test data, this is meaningless"
   
+  # Geometry to be plotted on the map
+  geometry <- sf::st_sfc(list(sf::st_point(c(0,51.5))), crs = 4326)
+  geometry <- sf::st_as_sf(data.frame(id = 1,
+                                      message= "Test Geometry",
+                                      type = "warning",
+                                      geometry = geometry))
+  
+  geometry <- geojsonsf::sf_geojson(geometry)
   
   
-  results <- list(pas2080,timeseries,payback_time,emissions_whole_life,netzero_compatiable,comments)
+  results <- list(pas2080,
+                  timeseries,
+                  payback_time,
+                  emissions_whole_life,
+                  netzero_compatiable,
+                  comments,geometry)
   
-  names(results) <- c("pas2080","timeseries","payback_time","emissions_whole_life","netzero_compatiable","comments")
+  names(results) <- c("pas2080",
+                      "timeseries",
+                      "payback_time",
+                      "emissions_whole_life",
+                      "netzero_compatiable",
+                      "comments",
+                      "geometry")
   
   
   results <- jsonlite::toJSON(results)

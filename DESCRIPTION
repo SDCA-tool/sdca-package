@@ -18,6 +18,8 @@ LazyData: true
 Imports:
     sf,
     dplyr,
+    geojsonsf,
+    stars,
     RcppSimdJson,
     jsonlite
 RoxygenNote: 7.1.2
