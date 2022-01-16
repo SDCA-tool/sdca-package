@@ -30,7 +30,7 @@ process_results = function(args) {
 
   emissions_whole_life <- -18000
   payback_time <- 10
-  netzero_compatiable <- "yes"
+  netzero_compatible <- "yes"
   comments <- "Test data, this is meaningless"
   
   # Geometry to be plotted on the map
@@ -47,14 +47,14 @@ process_results = function(args) {
                   timeseries,
                   payback_time,
                   emissions_whole_life,
-                  netzero_compatiable,
+                  netzero_compatible,
                   comments,geometry)
   
   names(results) <- c("pas2080",
                       "timeseries",
                       "payback_time",
                       "emissions_whole_life",
-                      "netzero_compatiable",
+                      "netzero_compatible",
                       "comments",
                       "geometry")
   
