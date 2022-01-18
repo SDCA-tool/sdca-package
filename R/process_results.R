@@ -16,7 +16,7 @@ process_results = function(args) {
   pas2080 <- data.frame(
     pas2080_code = c("A1","A2","A3","A4","A5",
                      "B1","B2","B3","B4","B5","B6","B7","B8","B9",
-                     "C1","c2","C3","C4"),
+                     "C1","C2","C3","C4"),
     emissions = c(1:18),
     emissions_high = c(1:18)*2,
     emissions_low = c(1:18)*0.5,
