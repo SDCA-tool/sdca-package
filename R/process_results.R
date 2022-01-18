@@ -13,6 +13,8 @@
 
 process_results = function(args) {
   
+  t_start <- Sys.time()
+  
   pas2080 <- data.frame(
     pas2080_code = c("A1","A2","A3","A4","A5",
                      "B1","B2","B3","B4","B5","B6","B7","B8","B9",
@@ -42,13 +44,17 @@ process_results = function(args) {
   
   geometry <- geojsonsf::sf_geojson(geometry)
   
+  t_end <- Sys.time()
+  processing_time <- as.numeric(difftime(t_end, t_start, units = "secs"))
   
   results <- list(pas2080,
                   timeseries,
                   payback_time,
                   emissions_whole_life,
                   netzero_compatible,
-                  comments,geometry)
+                  comments,
+                  geometry,
+                  processing_time)
   
   names(results) <- c("pas2080",
                       "timeseries",
@@ -56,7 +62,8 @@ process_results = function(args) {
                       "emissions_whole_life",
                       "netzero_compatible",
                       "comments",
-                      "geometry")
+                      "geometry",
+                      "processing_time")
   
   
   results <- jsonlite::toJSON(results)
