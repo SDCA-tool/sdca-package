@@ -16,24 +16,27 @@ process_results = function(args) {
   t_start <- Sys.time()
   
   pas2080 <- data.frame(
-    pas2080_code = c("A1","A2","A3","A4","A5",
+    pas2080_code = c("A1-3","A4","A5",
                      "B1","B2","B3","B4","B5","B6","B7","B8","B9",
                      "C1","C2","C3","C4"),
-    emissions = c(1:18),
-    emissions_high = c(1:18)*2,
-    emissions_low = c(1:18)*0.5,
-    confidence = "low",
+    emissions = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0),
+    emissions_high = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0)*1.1,
+    emissions_low = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0)*0.9,
+    confidence = c("medium","medium","medium",
+                   "not calculated","medium","medium","not calculated","not calculated",
+                   "not calculated","not calculated","not calculated","low",
+                   "not calculated","not calculated","not calculated","not calculated"),
     notes = "notes go here"
     )
   
   timeseries <- data.frame(year = 2022:2050,
-                           emissions = c(10000,rep(-1000, 28)))
+                           emissions = c(327689,rep(-4500, 28)))
   timeseries$emissions_cumulative <- cumsum(timeseries$emissions)
 
-  emissions_whole_life <- -18000
-  payback_time <- 10
-  netzero_compatible <- "yes"
-  comments <- "Test data, this is meaningless"
+  emissions_whole_life <- 187689
+  payback_time <- 81
+  netzero_compatible <- "No"
+  comments <- "Construction carbon exceeds carbon saving by 2050, does not decarbonise fast enough"
   
   # Geometry to be plotted on the map
   geometry <- sf::st_sfc(list(sf::st_point(c(0,51.5))), crs = 4326)
