@@ -1,0 +1,40 @@
+---
+title: "examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Example of demand modelling
+
+Step 1 Plot the desire lines near the proposed infrastructure.
+
+```{r setup, eval= FALSE, echo=FALSE}
+library(sdca)
+library(sf)
+library(tmap)
+flow <- read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
+infra <- read_sf("../inst/exdata/portishead.geojson")
+buff <- st_buffer(infra, 2000)
+desire <- flow[buff, op = st_within]
+desire <- desire[desire$from != desire$to,]
+```
+
+```{r plot_desire, eval= FALSE, echo=FALSE}
+tmap_mode("plot")
+tm_shape(desire) +
+  tm_lines(lwd = 0.1) +
+tm_shape(infra) +
+  tm_lines(col = "red", lwd = 3)
+
+```
+

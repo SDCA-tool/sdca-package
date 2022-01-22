@@ -20,6 +20,8 @@ Imports:
     dplyr,
     geojsonsf,
     stars,
+    lwgeom,
+    tidyr,
     RcppSimdJson,
     jsonlite
 RoxygenNote: 7.1.2
