@@ -7,7 +7,7 @@
 #' @return a dataframe of
 #' @examples
 #' \dontrun{
-#' process_results("jsonhere")
+#' 
 #' }
 #' @export
 
@@ -38,14 +38,17 @@ estimate_travel_demand <- function(infra, desire){
   desire$length <- as.numeric(sf::st_length(desire)) / 1000
   
   # Estimate New mode splits
-  mode_shifts <- data.frame(cycle = -2,
-                            drive = -15,
-                            passenger = -15,
-                            walk = 0,
-                            rail = 0,
-                            bus = -30,
-                            lgv = 0,
-                            hgv = 0)
+  data("mode_shifts", envir=environment())
+  mode_shifts <- mode_shifts[mode_shifts$infrastructure == "railway", ]
+  
+  # mode_shifts <- data.frame(cycle = -2,
+  #                           drive = -15,
+  #                           passenger = -15,
+  #                           walk = 0,
+  #                           rail = 0,
+  #                           bus = -30,
+  #                           lgv = 0,
+  #                           hgv = 0)
   
   # Estimate new number of trips
   desire$cycle_new <- round(desire$cycle * (mode_shifts$cycle + 100)/100, 0)
@@ -93,14 +96,15 @@ estimate_travel_demand <- function(infra, desire){
   desire$hgv_change_km <- desire$hgv_change * desire$length * 1.4
   
   # Emission factors kg/km DEFRA 2020
-  emissions_factors <- data.frame(cycle = 0,
-                            drive = 0.17431,
-                            passenger = 0,
-                            walk = 0,
-                            rail = 0.03549 ,
-                            bus = 0.10227,
-                            lgv = 0.24116,
-                            hgv = 0.86407)
+  data("emissions_factors", envir=environment())
+  # emissions_factors <- data.frame(cycle = 0,
+  #                           drive = 0.17431,
+  #                           passenger = 0,
+  #                           walk = 0,
+  #                           rail = 0.03549 ,
+  #                           bus = 0.10227,
+  #                           lgv = 0.24116,
+  #                           hgv = 0.86407)
   
   # Change in emissions 
   desire$cycle_change_emissions = desire$cycle_change_km * emissions_factors$cycle * 365
