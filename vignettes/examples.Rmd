@@ -22,11 +22,22 @@ Step 1 Plot the desire lines near the proposed infrastructure.
 library(sdca)
 library(sf)
 library(tmap)
-flow <- read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
-infra <- read_sf("../inst/exdata/portishead.geojson")
-buff <- st_buffer(infra, 2000)
-desire <- flow[buff, op = st_within]
+flow <- sf::read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
+infra <- sf::read_sf("../inst/exdata/portishead.geojson")
+buff <- sf::st_buffer(infra, 2000)
+desire <- flow[buff, op = sf::st_within]
 desire <- desire[desire$from != desire$to,]
+interventions <- read.csv("../../sdca-data/data_tables/interventions.csv")
+intervention_assets <- read.csv("../../sdca-data/data_tables/intervention_assets.csv")
+asset_components <- read.csv("../../sdca-data/data_tables/asset_components.csv")
+carbon_factors <- read.csv("../../sdca-data/data_tables/carbon_factors.csv")
+
+interventions = interventions[interventions$intervention == "New high speed route",]
+intervention_assets = intervention_assets[intervention_assets$intervention %in% interventions$intervention,]
+asset_components = asset_components[asset_components$intervention_asset %in% intervention_assets$asset, ]
+carbon_factors = carbon_factors[carbon_factors$cf_name %in% asset_components$cf_name, ]
+
+
 ```
 
 ```{r plot_desire, eval= FALSE, echo=FALSE}

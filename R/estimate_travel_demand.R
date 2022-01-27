@@ -38,7 +38,7 @@ estimate_travel_demand <- function(infra, desire){
   desire$length <- as.numeric(sf::st_length(desire)) / 1000
   
   # Estimate New mode splits
-  data("mode_shifts", envir=environment())
+  utils::data("mode_shifts", envir=environment())
   mode_shifts <- mode_shifts[mode_shifts$infrastructure == "railway", ]
   
   # mode_shifts <- data.frame(cycle = -2,
@@ -96,7 +96,7 @@ estimate_travel_demand <- function(infra, desire){
   desire$hgv_change_km <- desire$hgv_change * desire$length * 1.4
   
   # Emission factors kg/km DEFRA 2020
-  data("emissions_factors", envir=environment())
+  utils::data("emissions_factors", envir=environment())
   # emissions_factors <- data.frame(cycle = 0,
   #                           drive = 0.17431,
   #                           passenger = 0,

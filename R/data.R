@@ -11,5 +11,4 @@
 #' Based on SDCA research
 #'
 #' @format A data frame with 6 rows and 9 variables:
-#' @source \url{}
 "mode_shifts"
