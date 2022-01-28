@@ -38,3 +38,5 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 inst/doc
+vignettes/tmp/materialsites.geojson
+vignettes/tmp/materialsites.geojson.zip

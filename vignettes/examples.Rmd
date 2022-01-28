@@ -22,20 +22,62 @@ Step 1 Plot the desire lines near the proposed infrastructure.
 library(sdca)
 library(sf)
 library(tmap)
-flow <- sf::read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
+library(dplyr)
 infra <- sf::read_sf("../inst/exdata/portishead.geojson")
+
+flow <- sf::read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
 buff <- sf::st_buffer(infra, 2000)
 desire <- flow[buff, op = sf::st_within]
 desire <- desire[desire$from != desire$to,]
+
+
 interventions <- read.csv("../../sdca-data/data_tables/interventions.csv")
 intervention_assets <- read.csv("../../sdca-data/data_tables/intervention_assets.csv")
+intervention_assets_parameters <- read.csv("../../sdca-data/data_tables/intervention_assets_parameters.csv")
 asset_components <- read.csv("../../sdca-data/data_tables/asset_components.csv")
 carbon_factors <- read.csv("../../sdca-data/data_tables/carbon_factors.csv")
 
-interventions = interventions[interventions$intervention == "New high speed route",]
+dir.create("tmp")
+download.file("https://github.com/SDCA-tool/sdca-data/releases/download/map_data/materialsites.geojson.zip",
+              "tmp/materialsites.geojson.zip")
+unzip("tmp/materialsites.geojson.zip",exdir = "tmp")
+material_sites <- read_sf("tmp/materialsites.geojson")
+unlink("tmp", recursive = TRUE)
+cent <- st_centroid(infra$geometry)
+distance <- nngeo::st_nn(material_sites, cent, returnDist = TRUE)
+distance <- distance$dist
+distance <- unlist(distance)
+material_sites$distance = distance
+material_sites = material_sites %>%
+  st_drop_geometry %>%
+  group_by(Material_Types) %>%
+  summarise(distance_km = round(distance[distance == min(distance)] / 1000,1))
+
+interventions = interventions[interventions$intervention == "Viaduct",]
+interventions = interventions[interventions$mode == "High speed rail",]
 intervention_assets = intervention_assets[intervention_assets$intervention %in% interventions$intervention,]
+intervention_assets_parameters = intervention_assets_parameters[intervention_assets_parameters$asset %in% intervention_assets$asset,]
 asset_components = asset_components[asset_components$intervention_asset %in% intervention_assets$asset, ]
 carbon_factors = carbon_factors[carbon_factors$cf_name %in% asset_components$cf_name, ]
+
+infra <- cbind(infra, interventions[,c("infrastructure_type","mode_class","mode","intervention_class","intervention")])
+
+# Build example_json
+infra_json <- geojsonsf::sf_geojson(infra)
+desire_json <- geojsonsf::sf_geojson(desire)
+
+path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UKdem.tif"
+path_landcover = "D:/GitHub/SDCA-tool/sdca-data-prep/data/landcover.tif"
+
+json = list(infra_json, intervention_assets, intervention_assets_parameters, asset_components, carbon_factors, desire_json, path_dem, path_landcover, material_sites)
+names(json) = c("user_input", "intervention_assets", "intervention_assets_parameters", "asset_components", "carbon_factors", "desire_lines", "path_dem","path_landcover", "material_sites")
+
+#json = jsonlite::toJSON(json)
+jsonlite::write_json(json,"../../sdca-data/example_r_input.json", pretty = TRUE)
+
+# Test reading
+dat = jsonlite::read_json("../../sdca-data/example_r_input.json", simplifyVector = TRUE)
+dat = parse_json(jsonlite::toJSON(dat))
 
 
 ```

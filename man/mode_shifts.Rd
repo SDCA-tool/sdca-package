@@ -7,9 +7,6 @@
 \format{
 A data frame with 6 rows and 9 variables:
 }
-\source{
-\url{}
-}
 \usage{
 mode_shifts
 }

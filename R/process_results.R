@@ -68,6 +68,15 @@ process_results = function(args) {
                       "geometry",
                       "processing_time")
   
+  # Test if martin has updated the API
+  args <- try(parse_json(args), silent = TRUE)
+  if("try-error" %in% class(args)){
+    args = gsub("[\r\n]", "", args[1])
+    results$error <- args
+  } else {
+    results$error <- "API seems to be working. Enable the R package!"
+  }
+  
   
   results <- jsonlite::toJSON(results)
   return(results)
