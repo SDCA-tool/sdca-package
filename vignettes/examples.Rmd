@@ -53,8 +53,8 @@ material_sites = material_sites %>%
   group_by(Material_Types) %>%
   summarise(distance_km = round(distance[distance == min(distance)] / 1000,1))
 
-interventions = interventions[interventions$intervention == "Viaduct",]
-interventions = interventions[interventions$mode == "High speed rail",]
+interventions = interventions[interventions$intervention == "Track",]
+interventions = interventions[interventions$mode == "Heavy rail",]
 intervention_assets = intervention_assets[intervention_assets$intervention %in% interventions$intervention,]
 intervention_assets_parameters = intervention_assets_parameters[intervention_assets_parameters$asset %in% intervention_assets$asset,]
 asset_components = asset_components[asset_components$intervention_asset %in% intervention_assets$asset, ]
@@ -67,7 +67,7 @@ infra_json <- geojsonsf::sf_geojson(infra)
 desire_json <- geojsonsf::sf_geojson(desire)
 
 path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UKdem.tif"
-path_landcover = "D:/GitHub/SDCA-tool/sdca-data-prep/data/landcover.tif"
+path_landcover = "D:/GitHub/SDCA-tool/sdca-data-prep/data/land_use_4326.tif"
 
 json = list(infra_json, intervention_assets, intervention_assets_parameters, asset_components, carbon_factors, desire_json, path_dem, path_landcover, material_sites)
 names(json) = c("user_input", "intervention_assets", "intervention_assets_parameters", "asset_components", "carbon_factors", "desire_lines", "path_dem","path_landcover", "material_sites")

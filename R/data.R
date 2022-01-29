@@ -12,3 +12,14 @@
 #'
 #' @format A data frame with 6 rows and 9 variables:
 "mode_shifts"
+
+#' Emission factors for change in land use which match the CORINE land cover map
+#'
+#' Based on SDCA research
+#' 
+#' Factors in kgCo2 per m2 of land changed to settlement (i.e. built on)
+#' Two environmental zones included cold_temp_wet  and warm_temp_wet
+#' UK is mostly cold_temp_wet except for south west and London.
+#'
+#' @format A data frame with 37 rows and 4 variables:
+"landcover_factors"

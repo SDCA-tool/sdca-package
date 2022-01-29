@@ -2,6 +2,7 @@
 
 export(cut_fill)
 export(estimate_travel_demand)
+export(evaluate_landcover)
 export(evaluate_materials)
 export(extract_elevations)
 export(measure_infrastucture)
