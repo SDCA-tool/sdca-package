@@ -8,6 +8,7 @@
 #' @param asset_components a pre-subset data frame
 #' @param carbon_factors a pre-subset data frame
 #' @param material_sites a data frame of the nearest material sites
+#' @param path_dem path to dem
 #' @return a json string as a character 
 #' @examples
 #' \dontrun{
@@ -20,7 +21,8 @@ evaluate_materials <- function(infra,
                                intervention_assets_parameters,
                                asset_components, 
                                carbon_factors,
-                               material_sites){
+                               material_sites,
+                               path_dem){
   
   # Step 1: Drop unneeded info
   intervention_assets <- intervention_assets[,c("intervention",
@@ -59,7 +61,7 @@ evaluate_materials <- function(infra,
                                by = c("cf_name" = "cf_name"))
   
   # Step 3: Add in dimensions
-  infra <- measure_infrastucture(infra)
+  infra <- measure_infrastucture(infra, path_dem)
   #combined$asset_dimension <- get_asset_dimension(combined$asset_unit, infra$length)
   
   # combined$asset_dimension <- ifelse(combined$asset_unit == "number",

@@ -10,7 +10,7 @@
 #' process_results("jsonhere")
 #' }
 #' @export
-process_results = function(args, file = TRUE) {
+process_results = function(args, file = FALSE) {
   
   t_start <- Sys.time()
   
@@ -21,7 +21,8 @@ process_results = function(args, file = TRUE) {
                                      intervention_assets_parameters = dat$intervention_assets_parameters,
                                      asset_components = dat$asset_components,
                                      carbon_factors = dat$carbon_factors,
-                                     material_sites = dat$material_sites)
+                                     material_sites = dat$material_sites,
+                                     path_dem = dat$path_dem)
   
   res_demand = estimate_travel_demand(infra = dat$user_input,
                                       desire = dat$desire_lines)

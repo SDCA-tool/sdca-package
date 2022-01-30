@@ -10,7 +10,8 @@ evaluate_materials(
   intervention_assets_parameters,
   asset_components,
   carbon_factors,
-  material_sites
+  material_sites,
+  path_dem
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ evaluate_materials(
 \item{carbon_factors}{a pre-subset data frame}
 
 \item{material_sites}{a data frame of the nearest material sites}
+
+\item{path_dem}{path to dem}
 }
 \value{
 a json string as a character

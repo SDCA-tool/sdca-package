@@ -4,7 +4,7 @@
 \alias{process_results}
 \title{Process results}
 \usage{
-process_results(args, file = TRUE)
+process_results(args, file = FALSE)
 }
 \arguments{
 \item{args}{a json string as a character}
