@@ -10,7 +10,7 @@
 #' }
 #' @export
 parse_json <- function(json){
-  dat <- jsonlite::read_json(json, simplifyVector = TRUE)
+  dat <- jsonlite::fromJSON(json, simplifyVector = TRUE)
   expected_names <- c("user_input","intervention_assets",
                       "intervention_assets_parameters",
                       "asset_components","carbon_factors","desire_lines",
