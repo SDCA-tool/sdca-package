@@ -17,8 +17,3 @@ a dataframe of
 \description{
 Estimate the travel deamnd from desire lines
 }
-\examples{
-\dontrun{
-
-}
-}

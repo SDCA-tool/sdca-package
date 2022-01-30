@@ -6,10 +6,6 @@
 #' @param path_landcover path to landcover map
 #' @param width width of infrastructure assumed for lines
 #' @return a total emissions estimate in kgCO2
-#' @examples
-#' \dontrun{
-#' 
-#' }
 #' @export
 
 evaluate_landcover <- function(infra, path_landcover, width = 19){

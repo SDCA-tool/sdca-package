@@ -5,10 +5,6 @@
 #' @param infra a sf dataframe of infrastucutre
 #' @param desire as sf dataframe of desire lines
 #' @return a dataframe of
-#' @examples
-#' \dontrun{
-#' 
-#' }
 #' @export
 
 estimate_travel_demand <- function(infra, desire){

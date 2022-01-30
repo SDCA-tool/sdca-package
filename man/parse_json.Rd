@@ -4,10 +4,12 @@
 \alias{parse_json}
 \title{Parse JSON}
 \usage{
-parse_json(json)
+parse_json(json, file = TRUE)
 }
 \arguments{
 \item{json}{a json string as a character}
+
+\item{file}{logical, if TRUE json is passed as path to a file. Else assumed to contain json}
 }
 \value{
 a named list of data frames and other objects

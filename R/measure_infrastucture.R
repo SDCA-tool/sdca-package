@@ -5,10 +5,6 @@
 #' @param infra a sf dataframe of infrastructure
 #' @param path_dem path to the DEM raster
 #' @return a dataframe of
-#' @examples
-#' \dontrun{
-#' 
-#' }
 #' @export
 
 measure_infrastucture <- function(infra,
@@ -17,7 +13,14 @@ measure_infrastucture <- function(infra,
   
   # Get elevations
   
-  elevations <- extract_elevations(infra$geometry, path_dem)
+  elevations <- try(extract_elevations(infra$geometry, path_dem), silent = TRUE)
+  if("try-error" %in% class(elevations)){
+    elevations <- infra
+    elevations$elevation <- 0
+    elevations$road <- 0
+    elevations$difference <- 0
+  }
+  
   elevations$slope <- 45
   elevations$width <- 19
   

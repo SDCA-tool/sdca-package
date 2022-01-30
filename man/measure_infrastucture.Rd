@@ -20,8 +20,3 @@ a dataframe of
 \description{
 Measre infrastrcutre dimensions
 }
-\examples{
-\dontrun{
-
-}
-}

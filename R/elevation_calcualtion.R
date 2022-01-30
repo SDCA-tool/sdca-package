@@ -48,6 +48,8 @@ cut_fill <- function(elevations){
 
 #' Allocate cut and fill with maximum gradient
 #'
+#' @description extract elevations of a line and work our road gradient
+#' 
 #' @param line a sf dataframe of linestrings
 #' @param path_dem path to dem
 #' @param max_gradient maximum gradient as %

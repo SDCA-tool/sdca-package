@@ -3,17 +3,18 @@
 #' @description Main function that the webtool uses to process resutls from the API
 #'
 #' @param args a json string as a character
+#' @param file logical, is json a file path
 #' @return a json string as a character 
 #' @examples
 #' \dontrun{
 #' process_results("jsonhere")
 #' }
 #' @export
-process_results = function(args) {
+process_results = function(args, file = TRUE) {
   
   t_start <- Sys.time()
   
-  dat = parse_json(args)
+  dat = parse_json(args, file)
   
   res_materials = evaluate_materials(infra = dat$user_input,
                                      intervention_assets = dat$intervention_assets,

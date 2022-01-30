@@ -19,8 +19,3 @@ a total emissions estimate in kgCO2
 \description{
 Emissions produced by building over natural land
 }
-\examples{
-\dontrun{
-
-}
-}

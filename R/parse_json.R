@@ -3,14 +3,19 @@
 #' @description Function that take JSON from the API and convert into R format
 #'
 #' @param json a json string as a character
+#' @param file logical, if TRUE json is passed as path to a file. Else assumed to contain json
 #' @return a named list of data frames and other objects
 #' @examples
 #' \dontrun{
 #' parse_json("jsonhere")
 #' }
 #' @export
-parse_json <- function(json){
-  dat <- jsonlite::fromJSON(json, simplifyVector = TRUE)
+parse_json <- function(json, file = TRUE){
+  if(file){
+    dat <- jsonlite::read_json(json, simplifyVector = TRUE)
+  } else {
+    dat <- jsonlite::fromJSON(json, simplifyVector = TRUE)
+  }
   expected_names <- c("user_input","intervention_assets",
                       "intervention_assets_parameters",
                       "asset_components","carbon_factors","desire_lines",

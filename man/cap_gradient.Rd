@@ -17,5 +17,5 @@ cap_gradient(line, path_dem, max_gradient = 1.5)
 a dataframe of heights
 }
 \description{
-Allocate cut and fill with maximum gradient
+extract elevations of a line and work our road gradient
 }
