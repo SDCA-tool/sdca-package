@@ -23,7 +23,8 @@ Imports:
     lwgeom,
     tidyr,
     RcppSimdJson,
-    jsonlite
+    jsonlite,
+    geodist
 RoxygenNote: 7.1.2
 Suggests: 
     covr,

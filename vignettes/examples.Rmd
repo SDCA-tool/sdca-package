@@ -24,6 +24,7 @@ library(sf)
 library(tmap)
 library(dplyr)
 infra <- sf::read_sf("../inst/exdata/portishead.geojson")
+infra = infra[1,]
 
 flow <- sf::read_sf("D:/GitHub/ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
 buff <- sf::st_buffer(infra, 2000)
@@ -66,7 +67,7 @@ infra <- cbind(infra, interventions[,c("infrastructure_type","mode_class","mode"
 infra_json <- geojsonsf::sf_geojson(infra)
 desire_json <- geojsonsf::sf_geojson(desire)
 
-path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UKdem.tif"
+path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UK-dem-50m-4326-Int16.tif"
 path_landcover = "D:/GitHub/SDCA-tool/sdca-data-prep/data/land_use_4326.tif"
 
 json = list(infra_json, intervention_assets, intervention_assets_parameters, asset_components, carbon_factors, desire_json, path_dem, path_landcover, material_sites)

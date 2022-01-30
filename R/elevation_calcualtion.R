@@ -5,10 +5,6 @@
 #' @param line a sf dataframe of linestrings
 #' @param path_dem path to dem
 #' @return a dataframe of heights
-#' @examples
-#' \dontrun{
-#' 
-#' }
 #' @export
 
 extract_elevations <- function(line, path_dem){
@@ -36,10 +32,6 @@ extract_elevations <- function(line, path_dem){
 #'
 #' @param elevations a dataframe of elevation data
 #' @return a dataframe of cut and fill.
-#' @examples
-#' \dontrun{
-#' 
-#' }
 #' @export
 cut_fill <- function(elevations){
   
@@ -52,3 +44,60 @@ cut_fill <- function(elevations){
   
   return(elevations)
 }
+
+
+#' Allocate cut and fill with maximum gradient
+#'
+#' @param line a sf dataframe of linestrings
+#' @param path_dem path to dem
+#' @param max_gradient maximum gradient as %
+#' @return a dataframe of heights
+#' @export
+cap_gradient <- function(line, path_dem, max_gradient = 1.5){
+  
+  dem <- stars::read_stars(path_dem)
+  line_split <- sf::st_segmentize(line, dfMaxLength = 50)
+  line_split <- sf::st_cast(line_split, "POINT")
+  
+  heights <- stars::st_extract(dem, at = line_split)
+  names(heights) <- c("elevation","geometry")
+  coords <- sf::st_coordinates(heights)
+  heights <- sf::st_drop_geometry(heights)
+  heights$distance <- geodist::geodist(coords, sequential = TRUE, pad = TRUE)
+  heights$change_elevation <- c(NA, diff(heights$elevation))
+  heights$gradient <- heights$change_elevation / heights$distance * 100
+  
+  new_elevation <- list()
+  
+  for(i in 1:nrow(heights)){
+    if(i == 1){
+      new_elevation[[1]] <- heights$elevation[1]
+    } else {
+      from_elevation <- new_elevation[[i-1]]
+      to_elvation <- heights$elevation[i]
+      dist <- heights$distance[i]
+      grad <- (to_elvation - from_elevation)/dist * 100
+      if(grad >= 0){
+        if(grad > max_gradient){
+          new_elevation[[i]] <- from_elevation + max_gradient/100 * dist
+        } else {
+          new_elevation[[i]] <- to_elvation
+        }
+      } else {
+        if(grad < -max_gradient){
+          new_elevation[[i]] <- from_elevation - max_gradient/100 * dist
+        } else {
+          new_elevation[[i]] <- to_elvation
+        }
+      }
+    }
+  }
+  heights$road <- unlist(new_elevation)
+  heights$difference <- heights$elevation - heights$road
+  
+  
+  return(heights)
+}
+
+
+

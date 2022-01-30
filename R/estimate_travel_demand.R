@@ -130,10 +130,12 @@ estimate_travel_demand <- function(infra, desire){
   emissions_total <- tidyr::pivot_longer(emissions_total, cols = tidyr::everything())
   emissions_increase <- sum(emissions_total$value[emissions_total$value > 0])
   emissions_decrease <- sum(emissions_total$value[emissions_total$value < 0])
-  emissions_net <- emissions_increase - emissions_decrease
+  emissions_net <- emissions_increase + emissions_decrease
   
+  res <- list(emissions_increase, emissions_decrease, emissions_net)
+  names(res) <- c("emissions_increase", "emissions_decrease", "emissions_net")
   
-  return(emissions_net)
+  return(res)
     # desire_total <- sf::st_drop_geometry(desire)
     # desire_total <- desire_total[,c("cycle","drive","passenger","walk","rail","bus","lgv","hgv")]
     # desire_total <- dplyr::summarise_all(desire_total, .funs = sum)

@@ -9,9 +9,9 @@ evaluate_landcover(infra, path_landcover, width = 19)
 \arguments{
 \item{infra}{a sf dataframe of linestrings}
 
-\item{width}{width of infrastructure assumed for lines}
+\item{path_landcover}{path to landcover map}
 
-\item{path_dem}{path to landcover map}
+\item{width}{width of infrastructure assumed for lines}
 }
 \value{
 a total emissions estimate in kgCO2

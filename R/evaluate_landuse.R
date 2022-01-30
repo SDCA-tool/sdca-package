@@ -3,7 +3,7 @@
 #' @description Emissions produced by building over natural land
 #'
 #' @param infra a sf dataframe of linestrings
-#' @param path_dem path to landcover map
+#' @param path_landcover path to landcover map
 #' @param width width of infrastructure assumed for lines
 #' @return a total emissions estimate in kgCO2
 #' @examples

@@ -3,8 +3,8 @@
 #' @description Process the four key tables and get carbon factors for materials
 #'
 #' @param infra  data frame with infrastructure properties
-#' @param interventions a pre-subset data frame
 #' @param intervention_assets a pre-subset data frame
+#' @param intervention_assets_parameters a pre-subset data frame
 #' @param asset_components a pre-subset data frame
 #' @param carbon_factors a pre-subset data frame
 #' @param material_sites a data frame of the nearest material sites
@@ -16,7 +16,6 @@
 #' @export
 
 evaluate_materials <- function(infra,
-                               interventions, 
                                intervention_assets,
                                intervention_assets_parameters,
                                asset_components, 
@@ -32,18 +31,18 @@ evaluate_materials <- function(infra,
                                                 "tool_extracted_parameters",
                                                 "tool_calculated_parameters")]
   
-  asset_components <- asset_components[,c("intervention_asset",
-                                          "item",
-                                          "cf_name",
-                                          "input_unit",
-                                          "quantity",
-                                          "A5",
-                                          "asset_lifetime",
-                                          "replacements_during_lifetime",
-                                          "no_granular_data_A1.A3",
-                                          "no_granular_data_A4",
-                                          "no_granular_data_B2",
-                                          "no_granular_data_B4")]
+  # asset_components <- asset_components[,c("intervention_asset",
+  #                                         "item",
+  #                                         "cf_name",
+  #                                         "input_unit",
+  #                                         "quantity",
+  #                                         "A5",
+  #                                         "asset_lifetime",
+  #                                         "replacements_during_lifetime",
+  #                                         "no_granular_data_A1.A3",
+  #                                         "no_granular_data_A4",
+  #                                         "no_granular_data_B2",
+  #                                         "no_granular_data_B4")]
   
   carbon_factors <- carbon_factors[,c("cf_name",
                                       "carbon_factor",
@@ -92,8 +91,15 @@ evaluate_materials <- function(infra,
   A4_emissions = sum(combined$A4, na.rm = TRUE)
   
   #B4 Assume same as construction * replacements
+  combined$B4 = combined$A4 * combined$replacements_during_lifetime
+  
+  B4_emissions = sum(combined$B4, na.rm = TRUE)
   
   
+  results = list(A1_3_emissions, A4_emissions, A5_emissions,B4_emissions)
+  names(results) = c("A1_3_emissions", "A4_emissions", "A5_emissions","B4_emissions")
+  
+  return(results)
   
 }
 

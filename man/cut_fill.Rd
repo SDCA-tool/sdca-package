@@ -15,8 +15,3 @@ a dataframe of cut and fill.
 \description{
 extract elevations of a line
 }
-\examples{
-\dontrun{
-
-}
-}

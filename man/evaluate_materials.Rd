@@ -6,7 +6,6 @@
 \usage{
 evaluate_materials(
   infra,
-  interventions,
   intervention_assets,
   intervention_assets_parameters,
   asset_components,
@@ -17,9 +16,9 @@ evaluate_materials(
 \arguments{
 \item{infra}{data frame with infrastructure properties}
 
-\item{interventions}{a pre-subset data frame}
-
 \item{intervention_assets}{a pre-subset data frame}
+
+\item{intervention_assets_parameters}{a pre-subset data frame}
 
 \item{asset_components}{a pre-subset data frame}
 
