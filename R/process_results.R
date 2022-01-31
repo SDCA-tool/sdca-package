@@ -164,23 +164,23 @@ process_results2 = function(args) {
   t_end <- Sys.time()
   processing_time <- as.numeric(difftime(t_end, t_start, units = "secs"))
   
-  results <- list(pas2080,
-                  timeseries,
+  results <- list(netzero_compatible,
                   payback_time,
                   emissions_whole_life,
-                  netzero_compatible,
                   comments,
-                  geometry,
-                  processing_time)
+                  processing_time,
+                  pas2080,
+                  timeseries,
+                  geometry)
   
-  names(results) <- c("pas2080",
-                      "timeseries",
+  names(results) <- c("netzero_compatible",
                       "payback_time",
                       "emissions_whole_life",
-                      "netzero_compatible",
                       "comments",
-                      "geometry",
-                      "processing_time")
+                      "processing_time",
+                      "pas2080",
+                      "timeseries",
+                      "geometry")
   
   # Test if martin has updated the API
   args <- try(parse_json(args), silent = TRUE)
