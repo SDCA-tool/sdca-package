@@ -9,9 +9,12 @@
 
 estimate_travel_demand <- function(infra, desire){
   
+  desire = desire[desire$from != desire$to, ]
+  
   #Get straight line from infra
   infra_straight = linestring_to_line(infra)
   buff_straight = sf::st_buffer(infra_straight, 2000)
+  
   desire = desire[buff_straight, op = sf::st_within,]
   
   # Get Bearings
