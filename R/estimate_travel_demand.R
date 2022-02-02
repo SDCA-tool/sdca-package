@@ -16,8 +16,9 @@ estimate_travel_demand <- function(infra,
   
   desire = desire[desire$from != desire$to, ]
   
-  #desire = sf::st_transform(desire, 27700)
-  #infra = sf::st_transform(infra, 27700)
+  # Bug in R 3.6?
+  desire = as.data.frame(desire)
+  desire = sf::st_as_sf(desire, crs = 4326)
   
   # Split out Lines and non-lines
   infra_lines = infra[sf::st_geometry_type(infra$geometry) == "LINESTRING",]
@@ -51,8 +52,10 @@ estimate_travel_demand <- function(infra,
   } else {
     # Road Mode - Demand is along infrastructure
     
+    
     #Get straight line from infra
     infra_straight = linestring_to_line(infra_lines)
+    
     buff_straight = sf::st_buffer(infra_straight, 
                                   infra_buff_dist,
                                   endCapStyle = "SQUARE")
