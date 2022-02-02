@@ -22,7 +22,6 @@ Imports:
     stars,
     lwgeom,
     tidyr,
-    RcppSimdJson,
     jsonlite,
     geodist,
     checkmate
