@@ -24,9 +24,9 @@ process_results = function(args, file = FALSE) {
   checkmate::assert_data_frame(dat$carbon_factors, min.rows = 1)
   checkmate::assert_data_frame(dat$material_sites, nrows = 11, ncol = 2)
   checkmate::assert_character(dat$path_dem, len = 1)
-  checkmate::assert_file_exists(dat$path_dem)
+  #checkmate::assert_file_exists(dat$path_dem)
   checkmate::assert_character(dat$path_landcover, len = 1)
-  checkmate::assert_file_exists(dat$path_landcover)
+  #checkmate::assert_file_exists(dat$path_landcover)
   
   # Calculate Embodied Carbon for each row in Infra
   infra_list = dat$user_input
