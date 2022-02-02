@@ -11,6 +11,8 @@ measure_infrastucture <- function(infra,
                                   path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UK-dem-50m-4326-Int16.tif"){
   
   infra <- sf::st_as_sf(infra)
+  sf::st_geometry(infra) <- "geometry"
+  
   
   infra$length <- as.numeric(sf::st_length(infra))
   
