@@ -4,10 +4,12 @@
 \alias{line_to_bearing}
 \title{Convert lines to bearings}
 \usage{
-line_to_bearing(l)
+line_to_bearing(l, simplify = TRUE)
 }
 \arguments{
 \item{l}{linestring}
+
+\item{simplify}{logical, make all positive and rotate 90 degrees}
 }
 \value{
 numeric between -pi and +pi

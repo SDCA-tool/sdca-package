@@ -16,14 +16,39 @@ process_results = function(args, file = FALSE) {
   
   dat = parse_json(args, file)
   
-  res_materials = evaluate_materials(infra = dat$user_input,
-                                     intervention_assets = dat$intervention_assets,
-                                     intervention_assets_parameters = dat$intervention_assets_parameters,
-                                     asset_components = dat$asset_components,
-                                     carbon_factors = dat$carbon_factors,
-                                     material_sites = dat$material_sites,
-                                     path_dem = dat$path_dem)
+  # Check inputs
+  checkmate::assert_data_frame(dat$user_input, min.rows = 1)
+  checkmate::assert_data_frame(dat$intervention_assets, min.rows = 1)
+  checkmate::assert_data_frame(dat$intervention_assets_parameters, min.rows = 0)
+  checkmate::assert_data_frame(dat$asset_components, min.rows = 1)
+  checkmate::assert_data_frame(dat$carbon_factors, min.rows = 1)
+  checkmate::assert_data_frame(dat$material_sites, nrows = 11, ncol = 2)
+  checkmate::assert_character(dat$path_dem, len = 1)
+  checkmate::assert_file_exists(dat$path_dem)
+  checkmate::assert_character(dat$path_landcover, len = 1)
+  checkmate::assert_file_exists(dat$path_landcover)
   
+  # Calculate Embodied Carbon for each row in Infra
+  infra_list = dat$user_input
+  infra_list = split(infra_list, seq_len(nrow(infra_list)))
+  
+  table_materials = lapply(infra_list, 
+                           evaluate_materials, 
+                           intervention_assets = dat$intervention_assets,
+                           intervention_assets_parameters = dat$intervention_assets_parameters,
+                           asset_components = dat$asset_components,
+                           carbon_factors = dat$carbon_factors,
+                           material_sites = dat$material_sites,
+                           path_dem = dat$path_dem)
+  
+  table_materials = dplyr::bind_rows(table_materials)
+  table_materials$group = 1
+  res_materials = dplyr::group_by(table_materials, group)
+  res_materials = dplyr::summarise_all(res_materials, sum)
+  
+  
+  # Calculate Mode Shift and Induced Demand
+  # Emissions in kgCO2 per year
   res_demand = estimate_travel_demand(infra = dat$user_input,
                                       desire = dat$desire_lines)
   
@@ -77,7 +102,7 @@ process_results = function(args, file = FALSE) {
     comments <- "Project pays back slowly but before 2050"
   } else if(payback_time < 38){
     comments <- "Project pays back slowly but after 2050"
-  } else if(payback_time < 78){
+  } else if(payback_time < 150){
     comments <- "Project pays back very slowly"
   } else if(payback_time == 9999999){
     comments <- "Project permenantly increases the UK's carbon footprint"
@@ -101,69 +126,6 @@ process_results = function(args, file = FALSE) {
   t_end <- Sys.time()
   processing_time <- as.numeric(difftime(t_end, t_start, units = "secs"))
   
-  results <- list(pas2080,
-                  timeseries,
-                  payback_time,
-                  emissions_whole_life,
-                  netzero_compatible,
-                  comments,
-                  geometry,
-                  processing_time)
-  
-  names(results) <- c("pas2080",
-                      "timeseries",
-                      "payback_time",
-                      "emissions_whole_life",
-                      "netzero_compatible",
-                      "comments",
-                      "geometry",
-                      "processing_time")
-  
-  results <- jsonlite::toJSON(results)
-  return(results)
-}
-
-
-
-process_results2 = function(args) {
-  
-  t_start <- Sys.time()
-  
-  pas2080 <- data.frame(
-    pas2080_code = c("A1-3","A4","A5",
-                     "B1","B2","B3","B4","B5","B6","B7","B8","B9",
-                     "C1","C2","C3","C4"),
-    emissions = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0),
-    emissions_high = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0)*1.1,
-    emissions_low = c(214192,54066,52729.2,0,6341,0,360,0,0,0,0,-4500,0,0,0,0)*0.9,
-    confidence = c("medium","medium","medium",
-                   "not calculated","medium","medium","not calculated","not calculated",
-                   "not calculated","not calculated","not calculated","low",
-                   "not calculated","not calculated","not calculated","not calculated"),
-    notes = "notes go here"
-  )
-  
-  timeseries <- data.frame(year = 2022:2050,
-                           emissions = c(327689,rep(-4500, 28)))
-  timeseries$emissions_cumulative <- cumsum(timeseries$emissions)
-  
-  emissions_whole_life <- 187689
-  payback_time <- 81
-  netzero_compatible <- "No"
-  comments <- "Construction carbon exceeds carbon saving by 2050, does not decarbonise fast enough"
-  
-  # Geometry to be plotted on the map
-  geometry <- sf::st_sfc(list(sf::st_point(c(0,51.5))), crs = 4326)
-  geometry <- sf::st_as_sf(data.frame(id = 1,
-                                      message= "Test Geometry",
-                                      type = "warning",
-                                      geometry = geometry))
-  
-  geometry <- geojsonsf::sf_geojson(geometry)
-  
-  t_end <- Sys.time()
-  processing_time <- as.numeric(difftime(t_end, t_start, units = "secs"))
-  
   results <- list(netzero_compatible,
                   payback_time,
                   emissions_whole_life,
@@ -171,6 +133,7 @@ process_results2 = function(args) {
                   processing_time,
                   pas2080,
                   timeseries,
+                  res_demand$emissions_total,
                   geometry)
   
   names(results) <- c("netzero_compatible",
@@ -180,18 +143,12 @@ process_results2 = function(args) {
                       "processing_time",
                       "pas2080",
                       "timeseries",
+                      "demand_change",
                       "geometry")
-  
-  # Test if martin has updated the API
-  args <- try(parse_json(args), silent = TRUE)
-  if("try-error" %in% class(args)){
-    args = gsub("[\r\n]", "", args[1])
-    results$error <- args
-  } else {
-    results$error <- "API seems to be working. Enable the R package!"
-  }
-  
   
   results <- jsonlite::toJSON(results)
   return(results)
 }
+
+
+

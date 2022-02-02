@@ -17,6 +17,7 @@ evaluate_landcover <- function(infra, path_landcover, width = 19){
   landcover_types <- stars::st_extract(landcover, at = line_split)
   names(landcover_types) <- c("landcover_id","geometry")
   
+  landcover_factors <- NULL
   utils::data("landcover_factors", envir=environment())
   
   landcover_types <- dplyr::left_join(landcover_types, 

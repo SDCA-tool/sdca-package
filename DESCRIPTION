@@ -24,7 +24,8 @@ Imports:
     tidyr,
     RcppSimdJson,
     jsonlite,
-    geodist
+    geodist,
+    checkmate
 RoxygenNote: 7.1.2
 Suggests: 
     covr,

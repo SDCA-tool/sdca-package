@@ -4,12 +4,21 @@
 \alias{estimate_travel_demand}
 \title{Estimate Travel Demand}
 \usage{
-estimate_travel_demand(infra, desire)
+estimate_travel_demand(
+  infra,
+  desire,
+  stop_buff_dist = 3000,
+  infra_buff_dist = 3000
+)
 }
 \arguments{
 \item{infra}{a sf dataframe of infrastucutre}
 
 \item{desire}{as sf dataframe of desire lines}
+
+\item{stop_buff_dist}{distance in metres to buffer stops}
+
+\item{infra_buff_dist}{distance in metres to buffer infrastructure}
 }
 \value{
 a dataframe of
