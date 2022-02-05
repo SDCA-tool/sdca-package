@@ -97,9 +97,26 @@ evaluate_materials <- function(infra,
   
   B4_emissions = sum(combined$B4, na.rm = TRUE)
   
+  # Make Detailed Emission Table
+  combined = combined[,c("intervention","asset","item",
+                         "quantity_total","input_unit.x",
+                         "emissions_total","A4",
+                         "A5","B4")]
+  names(combined) = c("intervention","asset","item",
+                      "quantity","quantity_units",
+                      "A1_3","A4",
+                      "A5","B4")
+  combined = combined[order(combined$A1_3, decreasing = TRUE),]
   
-  results = list(A1_3_emissions, A4_emissions, A5_emissions,B4_emissions)
-  names(results) = c("A1_3_emissions", "A4_emissions", "A5_emissions","B4_emissions")
+  headline = data.frame(A1_3_emissions = A1_3_emissions,
+                        A4_emissions = A4_emissions,
+                        A5_emissions = A5_emissions,
+                        B4_emissions = B4_emissions,
+                        stringsAsFactors = FALSE)
+  
+  
+  results = list(headline, combined)
+  names(results) = c("headline","itemised")
   
   return(results)
   

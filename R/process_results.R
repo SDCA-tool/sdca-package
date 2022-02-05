@@ -29,6 +29,7 @@ process_results = function(args, file = FALSE) {
   #checkmate::assert_file_exists(dat$path_landcover)
   
   # Calculate Embodied Carbon for each row in Infra
+  # Emissions in kgCO2
   infra_list = dat$user_input
   infra_list = split(infra_list, seq_len(nrow(infra_list)))
   
@@ -41,9 +42,14 @@ process_results = function(args, file = FALSE) {
                            material_sites = dat$material_sites,
                            path_dem = dat$path_dem)
   
-  table_materials = dplyr::bind_rows(table_materials)
-  table_materials$group = 1
-  res_materials = dplyr::group_by(table_materials, group)
+  itemised_emissions <- lapply(table_materials, function(x){x$itemised})
+  itemised_emissions <- dplyr::bind_rows(itemised_emissions, .id = "intervention_id")
+  
+  res_materials <- lapply(table_materials, function(x){x$headline})
+  res_materials <- dplyr::bind_rows(res_materials)
+  
+  res_materials$group = 1
+  res_materials = dplyr::group_by(res_materials, group)
   res_materials = dplyr::summarise_all(res_materials, sum)
   
   
@@ -65,7 +71,7 @@ process_results = function(args, file = FALSE) {
                 res_demand$emissions_net,
                 0,0,0,0)
   
-  emissions <- emissions / 1000
+  emissions <- round(emissions / 1000, 2)
   
   pas2080 <- data.frame(
     pas2080_code = c("A1-3","A4","A5",
@@ -134,6 +140,7 @@ process_results = function(args, file = FALSE) {
                   pas2080,
                   timeseries,
                   res_demand$emissions_total,
+                  itemised_emissions,
                   geometry)
   
   names(results) <- c("netzero_compatible",
@@ -144,6 +151,7 @@ process_results = function(args, file = FALSE) {
                       "pas2080",
                       "timeseries",
                       "demand_change",
+                      "itemised_emissions",
                       "geometry")
   
   results <- jsonlite::toJSON(results)
