@@ -3,12 +3,18 @@
 #' @description Measre infrastrcutre dimensions
 #'
 #' @param infra a sf dataframe of infrastructure
-#' @param path_dem path to the DEM raster
+#' @param rast_dem stars raster DEM raster
+#' @param rast_bedrock stars raster bedrock raster
+#' @param rast_superficial stars raster superficial raster
+#' @param rast_landcover stars raster landcover raster
 #' @return a dataframe of
 #' @export
 
-measure_infrastucture <- function(infra,
-                                  path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UK-dem-50m-4326-Int16.tif"){
+measure_infrastucture <- function(infra, 
+                                  rast_dem, 
+                                  rast_bedrock, 
+                                  rast_superficial, 
+                                  rast_landcover){
   
   
   # R 3.6 Bug?
@@ -17,7 +23,22 @@ measure_infrastucture <- function(infra,
   
   infra$length <- as.numeric(sf::st_length(infra))
   
-  # Get elevations
+  # Get data from rasters
+  raster_data = extract_rasters(infra, 
+                                rast_dem, 
+                                rast_bedrock, 
+                                rast_superficial, 
+                                rast_landcover)
+  
+  # Calculate the gradient of the road
+  raster_data = cap_gradient(raster_data, max_gradient = 1.5)
+  
+  #Calculate the volume of the cut / fill
+  
+  
+  
+  
+  
   elevations <- try(extract_elevations(infra$geometry, path_dem), silent = TRUE)
   if("try-error" %in% class(elevations)){
     elevations <- infra

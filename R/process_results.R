@@ -28,6 +28,12 @@ process_results = function(args, file = FALSE) {
   checkmate::assert_character(dat$path_landcover, len = 1)
   #checkmate::assert_file_exists(dat$path_landcover)
   
+  # Get Rasters
+  rast_dem <- stars::read_stars(dat$path_dem)
+  rast_bedrock <- stars::read_stars(dat$path_bedrock)
+  rast_superficial <- stars::read_stars(dat$path_superficial)
+  rast_landcover <- stars::read_stars(dat$path_landcover)
+  
   # Calculate Embodied Carbon for each row in Infra
   # Emissions in kgCO2
   infra_list = dat$user_input
@@ -40,7 +46,10 @@ process_results = function(args, file = FALSE) {
                            asset_components = dat$asset_components,
                            carbon_factors = dat$carbon_factors,
                            material_sites = dat$material_sites,
-                           path_dem = dat$path_dem)
+                           rast_dem = rast_dem,
+                           rast_bedrock = rast_bedrock,
+                           rast_superficial = rast_superficial,
+                           rast_landcover = rast_landcover)
   
   itemised_emissions <- lapply(table_materials, function(x){x$itemised})
   itemised_emissions <- dplyr::bind_rows(itemised_emissions, .id = "intervention_id")
