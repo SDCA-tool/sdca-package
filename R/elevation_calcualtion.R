@@ -137,10 +137,6 @@ cut_fill <- function(raster_data, width = 19){
   raster_data$br_cut_carbon = raster_data$cut_volume_br * raster_data$br_cut
   raster_data$sp_cut_carbon = raster_data$cut_volume_sp * raster_data$sp_cut
   
-  # Calculate the carbon for the processing
-  raster_data$br_processing_carbon = raster_data$cut_volume_br * raster_data$br_processing
-  raster_data$sp_processing_carbon = raster_data$cut_volume_sp * raster_data$sp_processing
-  
   # Calculate the fill requirements
   raster_data$fill_height = ifelse(raster_data$difference < 0,
                                     -raster_data$difference, 0)
@@ -154,11 +150,12 @@ cut_fill <- function(raster_data, width = 19){
     raster_data$fill_area_start - 
     raster_data$fill_area_cap
   
+  raster_data$fill_area_general = ifelse(raster_data$fill_area_general < 0,0,
+                                         raster_data$fill_area_general)
+  
   raster_data$fill_volume_start = raster_data$fill_area_start * raster_data$distance
   raster_data$fill_volume_cap = raster_data$fill_area_cap * raster_data$distance
   raster_data$fill_volume_general = raster_data$fill_area_general * raster_data$distance
-  
-  # TODO: Fix -ve fill area and finish calcs
   
   # Sum values
   cut_fill_totals = colSums(raster_data[,c("br_type_0_vol","br_type_1_vol",
@@ -203,20 +200,88 @@ cut_fill <- function(raster_data, width = 19){
   fill_cap_net = fill_cap_needed - fill_cap_available
   fill_general_net = fill_general_needed - fill_general_available
   
+  # Cacualte material to be brought onsite/removed
+  # TODO: convert material on/off site to kg once density data availalbe
   
-  # TODO: Understand the lat bits of the cacualtions
+  
+  material_onsite = c(fill_start_net, fill_cap_net, fill_general_net)
+  material_onsite = ifelse(material_onsite > 0,material_onsite,0)
+  material_onsite = sum(material_onsite, na.rm = TRUE) * 2000 # assumed density
+  
+  material_offsite = c(fill_start_net, fill_cap_net, fill_general_net)
+  material_offsite = ifelse(material_offsite < 0,-material_offsite,0)
+  material_offsite = sum(material_offsite, na.rm = TRUE) * 2000 #assumed density
+  
+  # Calculate the carbon for the processing
+  # Only process the proportion of the cut used in the fill
+  # TODO: Come up with a better way to allocate materials to ensure optimal use of material
+  
+  #raster_data$br_processing_carbon = raster_data$cut_volume_br * raster_data$br_processing
+  #raster_data$sp_processing_carbon = raster_data$cut_volume_sp * raster_data$sp_processing # no superficial require processing
+  
+  # Proportion of cut use
+  fill_start_propotion = fill_start_needed / fill_start_available
+  fill_cap_propotion = fill_cap_needed / fill_cap_available
+  fill_general_propotion = fill_general_needed / fill_general_available
+  
+  if(is.infinite(fill_start_propotion)){
+    fill_start_propotion <- 0
+  }
+  if(is.infinite(fill_cap_propotion)){
+    fill_cap_propotion <- 0
+  }
+  if(is.infinite(fill_general_propotion)){
+    fill_general_propotion <- 0
+  }
+  
+  if(fill_start_propotion > 1){
+    fill_start_propotion <- 1
+  }
+  if(fill_cap_propotion > 1){
+    fill_cap_propotion <- 1
+  }
+  if(fill_general_propotion > 1){
+    fill_general_propotion <- 1
+  }
+  
+  
+  # Processing volumne and carbon emissions
+  processing_volume = fill_start_available * fill_start_propotion +
+    fill_cap_available * fill_cap_propotion +
+    fill_general_available * fill_general_propotion
+  
+  processing_carbon = processing_volume * mean(raster_data$br_processing, na.rm = TRUE)
+  
+  # Fill Emissions
+  # For imported material
+  # TODO: Get better numbers from Will
+  fill_emissions_general_average = 0.6
+  fill_emissions_cap_average = 0.9
+  fill_emissions_start_average = 0.9
+  
+  # Calculate fill emissions for reused material
+  fill_reused_carbon = processing_volume * mean(raster_data$br_fill, na.rm = TRUE)
+  fill_import_start_carbon = fill_start_net * fill_emissions_start_average
+  fill_import_cap_carbon = fill_cap_net * fill_emissions_cap_average
+  fill_import_general_carbon = fill_start_net * fill_emissions_general_average
+  
+  
+  
+  
   
   res = data.frame(
-    total_cut = 0,
-    total_fill = 0,
-    carbon_cut = 0,
-    carbon_processing = 0,
-    carbon_fill = 0,
-    material_disposal = 0,
+    total_cut = sum(raster_data$cut_volume_br, raster_data$cut_volume_sp, na.rm = TRUE),
+    total_fill = sum(cut_fill_totals[c("fill_volume_start","fill_volume_cap",
+                                     "fill_volume_general")], na.rm = TRUE),
+    carbon_cut = sum(raster_data$br_cut_carbon, raster_data$sp_cut_carbon, na.rm = TRUE),
+    carbon_processing = processing_carbon,
+    carbon_fill = sum(fill_reused_carbon, fill_import_start_carbon, fill_import_cap_carbon, fill_import_general_carbon),
+    material_disposal = material_offsite,
+    material_brought_in = material_onsite
   )
+  rownames(res) = seq(1,nrow(res))
   
-  
-  return(elevations)
+  return(res)
 }
 
 

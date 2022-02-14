@@ -40,10 +40,10 @@ process_results = function(args, file = FALSE) {
   infra_list = split(infra_list, seq_len(nrow(infra_list)))
   
   table_materials = lapply(infra_list, 
-                           evaluate_materials, 
-                           intervention_assets = dat$intervention_assets,
+                           measure_infrastucture, 
+                           assets = dat$intervention_assets,
                            intervention_assets_parameters = dat$intervention_assets_parameters,
-                           asset_components = dat$asset_components,
+                           components = dat$asset_components,
                            carbon_factors = dat$carbon_factors,
                            material_sites = dat$material_sites,
                            rast_dem = rast_dem,
