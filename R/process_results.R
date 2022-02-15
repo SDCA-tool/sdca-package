@@ -18,9 +18,9 @@ process_results = function(args, file = FALSE) {
   
   # Step 2: Check inputs
   checkmate::assert_data_frame(dat$user_input, min.rows = 1)
-  checkmate::assert_data_frame(dat$intervention_assets, min.rows = 1)
-  checkmate::assert_data_frame(dat$intervention_assets_parameters, min.rows = 0)
-  checkmate::assert_data_frame(dat$asset_components, min.rows = 1)
+  checkmate::assert_data_frame(dat$assets, min.rows = 1)
+  checkmate::assert_data_frame(dat$assets_parameters, min.rows = 0)
+  checkmate::assert_data_frame(dat$components, min.rows = 1)
   checkmate::assert_data_frame(dat$carbon_factors, min.rows = 1)
   checkmate::assert_data_frame(dat$material_sites, nrows = 11, ncol = 2)
   checkmate::assert_character(dat$path_dem, len = 1)
@@ -51,7 +51,7 @@ process_results = function(args, file = FALSE) {
   construction_emissions = lapply(infra_list, 
                            measure_infrastucture, 
                            assets = dat$intervention_assets,
-                           intervention_assets_parameters = dat$intervention_assets_parameters,
+                           intervention_assets_parameters = dat$assets_parameters,
                            components = dat$asset_components,
                            carbon_factors = dat$carbon_factors,
                            material_sites = dat$material_sites,

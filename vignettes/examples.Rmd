@@ -42,7 +42,7 @@ library(dplyr)
 #           geometry = infra)
 # 
 # st_write(infra, "../inst/exdata/portishead.geojson")
-infra = read_sf("../data/map.geojson")
+
 
 ```
 
@@ -50,7 +50,7 @@ infra = read_sf("../data/map.geojson")
 Step 2: Simulate the API returning the necessary data
 
 ```{r make_input, eval= FALSE, echo=FALSE}
-
+infra = read_sf("../data/map.geojson")
 
 
 flow <- geojsonsf::geojson_sf("../../../ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
