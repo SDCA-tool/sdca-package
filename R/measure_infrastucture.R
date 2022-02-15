@@ -38,7 +38,7 @@ measure_infrastucture <- function(infra,
   
   # Drop unneeded info
   assets <- assets[assets$intervention %in% infra$intervention,]
-  components <- components[components$intervention_asset %in% assets$asset,]
+  components <- components[components$asset %in% assets$asset,]
   carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
   
   # Set up main rules
@@ -80,7 +80,7 @@ measure_infrastucture <- function(infra,
   # Join together
   combined <- dplyr::left_join(assets, 
                                components, 
-                               by = c("asset" = "intervention_asset"))
+                               by = c("asset" = "asset"))
   combined <- dplyr::left_join(combined, 
                                carbon_factors, 
                                by = c("cf_name" = "cf_name"))
