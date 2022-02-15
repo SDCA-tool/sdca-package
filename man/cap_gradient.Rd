@@ -2,18 +2,18 @@
 % Please edit documentation in R/elevation_calcualtion.R
 \name{cap_gradient}
 \alias{cap_gradient}
-\title{Allocate cut and fill with maximum gradient}
+\title{Infer profile of new road}
 \usage{
 cap_gradient(raster_data, max_gradient = 1.5)
 }
 \arguments{
-\item{raster_data}{a sf dataframe of points and data from the raster}
+\item{raster_data}{a dataframe of from `extract_rasters()`}
 
-\item{max_gradient}{maximum gradient as %}
+\item{max_gradient}{max gradient as percentage}
 }
 \value{
-a dataframe of heights
+a dataframe with extra columns
 }
 \description{
-extract elevations of a line and work our road gradient
+extract elevations of a line with max gradient
 }

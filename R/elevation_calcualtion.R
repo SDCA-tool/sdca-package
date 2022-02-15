@@ -285,15 +285,15 @@ cut_fill <- function(raster_data, width = 19){
 }
 
 
-#' Allocate cut and fill with maximum gradient
-#'
-#' @description extract elevations of a line and work our road gradient
-#' 
-#' @param raster_data a sf dataframe of points and data from the raster
-#' @param max_gradient maximum gradient as %
-#' @return a dataframe of heights
-#' @export
 
+#' Infer profile of new road
+#'
+#' @description extract elevations of a line with max gradient
+#'
+#' @param raster_data a dataframe of from `extract_rasters()`
+#' @param max_gradient max gradient as percentage
+#' @return a dataframe with extra columns
+#' @export
 cap_gradient <- function(raster_data, max_gradient = 1.5){
   
   coords <- sf::st_coordinates(raster_data)

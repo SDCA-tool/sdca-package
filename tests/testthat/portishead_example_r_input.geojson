@@ -1,6 +1,6 @@
 {
   "user_input": ["{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"transport\",\"mode_class\":\"Rail\",\"intervention_class\":\"New construction\",\"mode\":\"High speed rail\",\"intervention\":\"Viaduct\"},\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[-2.753964821222611,51.4833477508651],[-2.736159169550178,51.4793108419839],[-2.727148212226072,51.47801326412923],[-2.721092848904272,51.47866205305657],[-2.716190888119959,51.480175893887018],[-2.706459054209924,51.48183391003465],[-2.699106113033453,51.48305940023073],[-2.692834486735876,51.48385236447525]]}},{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"transport\",\"mode_class\":\"Rail\",\"intervention_class\":\"New construction\",\"mode\":\"High speed rail\",\"intervention\":\"Viaduct\"},\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[-2.692852508650525,51.48361807958482],[-2.684201989619383,51.479581170703628],[-2.676272347174169,51.47626513840836],[-2.669351931949256,51.47655348904273],[-2.663729094579014,51.479869521337999],[-2.658538783160328,51.481022923875489],[-2.652771770472901,51.47828359284895],[-2.651330017301043,51.4748233852365],[-2.651618367935415,51.473381632064647],[-2.646860582468287,51.47093065167248],[-2.638065888119959,51.467902970011589],[-2.634461505190317,51.466893742791288],[-2.631722174163789,51.46213595732416],[-2.632298875432531,51.45723399653984],[-2.629271193771632,51.45507136678206],[-2.627396914648218,51.45189950980397],[-2.625666810841989,51.447430074971219],[-2.625666810841989,51.44310481545564],[-2.625955161476361,51.44123053633223],[-2.622783304498276,51.43704945213384],[-2.621341551326418,51.43387759515576],[-2.617881343713962,51.43185914071516],[-2.613267733564019,51.43157079008079]]}},{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"onward_travel\",\"mode_class\":\"onward_travel\",\"intervention_class\":\"onward_travel\",\"mode\":\"onward_travel\",\"intervention\":\"onward_travel\"},\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[-2.612835207612463,51.431570790080787],[-2.579674884659752,51.44988105536337]]}},{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"transport\",\"mode_class\":\"Rail\",\"intervention_class\":\"New construction\",\"mode\":\"High speed rail\",\"intervention\":\"Station - at grade\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-2.753766580161483,51.48325764129184]}},{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"transport\",\"mode_class\":\"Rail\",\"intervention_class\":\"New construction\",\"mode\":\"High speed rail\",\"intervention\":\"Station - at grade\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-2.685274293540952,51.480311058246879]}},{\"type\":\"Feature\",\"properties\":{\"infrastructure_type\":\"transport\",\"mode_class\":\"Rail\",\"intervention_class\":\"New construction\",\"mode\":\"High speed rail\",\"intervention\":\"Station - at grade\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-2.621296496539799,51.433868584198418]}}]}"],
-  "intervention_assets": [
+  "assets": [
     {
       "intervention": "Station - at grade",
       "asset": "Building",
@@ -74,7 +74,7 @@
       "tool_calculated_parameters": ""
     }
   ],
-  "intervention_assets_parameters": [
+  "assets_parameters": [
     {
       "asset": "Building",
       "parameter": "area",
@@ -217,9 +217,9 @@
       "default": 1
     }
   ],
-  "asset_components": [
+  "components": [
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Highways",
       "item": "Viaduct Access Tracks and Footpaths",
       "quantity": 679.94,
@@ -230,7 +230,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Highways",
       "item": "Concrete kerbing",
       "quantity": 0.073,
@@ -241,7 +241,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Highways",
       "item": "Limestone dust",
       "quantity": 8.4133,
@@ -252,7 +252,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Highways",
       "item": "Kerbing",
       "quantity": 0.2519,
@@ -263,7 +263,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Highways",
       "item": "Imported fill",
       "quantity": 1505.04,
@@ -274,7 +274,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Drainage",
       "item": "Geotextiles",
       "quantity": 13.4599,
@@ -285,7 +285,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Drainage",
       "item": "HDPE Ridgidrain Perforated Pipe",
       "quantity": 12.7237,
@@ -296,7 +296,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Drainage",
       "item": "PVC Drainage Pipes",
       "quantity": 5.1241,
@@ -307,7 +307,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Drainage",
       "item": "UPVC Membrane",
       "quantity": 3.2304,
@@ -318,7 +318,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Drainage",
       "item": "Drainage Stone (m3)",
       "quantity": 1236.61,
@@ -329,7 +329,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Acrylic",
       "quantity": 59.9644,
@@ -340,7 +340,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Rockwool",
       "quantity": 8.2524,
@@ -351,7 +351,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Steel Frame",
       "quantity": 312.9518,
@@ -362,7 +362,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Longitudinal Steel Support Beam",
       "quantity": 156.8835,
@@ -373,7 +373,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Vertical Steel Support Columns",
       "quantity": 369.6721,
@@ -384,7 +384,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Vertical Steel Support Columns",
       "quantity": 10.805,
@@ -395,7 +395,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Absorptive top edge - beam",
       "quantity": 954.5786,
@@ -406,7 +406,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Absorbative top edge - resonator",
       "quantity": 6.965,
@@ -417,7 +417,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Steel Cladding on Acrylic Wall",
       "quantity": 35.0571,
@@ -428,7 +428,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Noise Barriers",
       "item": "Rubber flab",
       "quantity": 45.1469,
@@ -439,7 +439,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Other",
       "item": "Temporary works - Viaduct Haul Road Hardstand",
       "quantity": 56201.78,
@@ -450,7 +450,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Piling",
       "quantity": 16.0908,
@@ -461,7 +461,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Pile Caps",
       "quantity": 3.7941,
@@ -472,7 +472,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Pier",
       "quantity": 4.6616,
@@ -483,7 +483,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Abutments",
       "quantity": 0.0841,
@@ -494,7 +494,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Precast Segments",
       "quantity": 24.4522,
@@ -505,7 +505,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Equipment",
       "quantity": 11.5656,
@@ -516,7 +516,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "River Colne Diversion (temporary works)",
       "quantity": 0.0527,
@@ -527,7 +527,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Jetty (temporary works)",
       "quantity": 25.1814,
@@ -538,7 +538,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Construction Compounds (temporary works)",
       "quantity": 3.2376,
@@ -549,7 +549,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Concrete",
       "item": "Fencing",
       "quantity": 0.0273,
@@ -560,7 +560,7 @@
       "replacements_during_lifetime": 3
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Piling",
       "quantity": 2128.1,
@@ -571,7 +571,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Pile Caps",
       "quantity": 886.82,
@@ -582,7 +582,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Pier",
       "quantity": 687.79,
@@ -593,7 +593,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Abutments",
       "quantity": 29.97,
@@ -604,7 +604,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Precast Segments",
       "quantity": 5448,
@@ -615,7 +615,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Equipment",
       "quantity": 586.82,
@@ -626,7 +626,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Bearings",
       "quantity": 174.2137,
@@ -637,7 +637,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Coffer dams",
       "quantity": 352.2325,
@@ -648,7 +648,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "River Colne Diversion (temporary works)",
       "quantity": 229.2285,
@@ -659,7 +659,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Jetty (temporary works)",
       "quantity": 1240.4649,
@@ -670,7 +670,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Construction Compounds (temporary works)",
       "quantity": 164.27,
@@ -681,7 +681,7 @@
       "replacements_during_lifetime": 0
     },
     {
-      "intervention_asset": "Viaduct",
+      "asset": "Viaduct",
       "works_category_level_1": "Steel",
       "item": "Fencing",
       "quantity": 60.6752,
