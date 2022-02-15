@@ -42,3 +42,4 @@ vignettes/tmp/materialsites.geojson
 vignettes/tmp/materialsites.geojson.zip
 data/map.geojson
 tests/testthat/portishead_example_r_input.geojson.bak
+data/map2.geojson

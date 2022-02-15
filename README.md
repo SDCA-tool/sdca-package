@@ -1,6 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/SDCA-tool/sdca-package/workflows/R-CMD-check/badge.svg)](https://github.com/SDCA-tool/sdca-package/actions)
+<!-- badges: end -->
+
 # SDCA
 
 The R Package for the SDCA Project
@@ -9,14 +14,13 @@ The R Package for the SDCA Project
 
 Ensure you have system dependencies:
 
-```sudo install -y libssl-dev libcurl4-openssl-dev libxml2-dev libudunits2-dev libgdal-dev```
+`sudo install -y libssl-dev libcurl4-openssl-dev libxml2-dev
+libudunits2-dev libgdal-dev`
 
 and R dependences:
 
-```
-R -e 'if (!require("units")) install.packages("units");'
-R -e 'if (!require("sf")) install.packages("sf");'
-```
+    R -e 'if (!require("units")) install.packages("units");'
+    R -e 'if (!require("sf")) install.packages("sf");'
 
 Install the package with **remotes** as follows:
 
