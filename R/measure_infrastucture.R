@@ -36,6 +36,11 @@ measure_infrastucture <- function(infra,
   # 3 - (conditional) estimate earthwork requirements
   # 4 - estimate land cover change and emissions
   
+  # Drop unneeded info
+  assets <- assets[assets$intervention %in% infra$intervention,]
+  components <- components[components$intervention_asset %in% assets$asset,]
+  carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
+  
   # Set up main rules
   
   # Skip the special onward travel case as no construction occurs
@@ -45,18 +50,12 @@ measure_infrastucture <- function(infra,
     return(results)
   }
   
-  
-  
   # TODO: Not all lines nead cut_fill add logic
   if(sf::st_geometry_type(infra) == "LINESTRING"){
     do_cut_fill <- TRUE
   } else {
     do_cut_fill <- FALSE
   }
-  
-  
-  
-  
   
   # Step 1: Measure infrastructure and get data
   # R 3.6 Bug?
@@ -76,10 +75,6 @@ measure_infrastucture <- function(infra,
   
   
   # Step 2: Estimate Materials required
-  # Drop unneeded info
-  assets <- assets[assets$intervention %in% infra$intervention,]
-  components <- components[components$intervention_asset %in% assets$asset,]
-  carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
   
   # TODO: Method for no descrete data
   # Join together

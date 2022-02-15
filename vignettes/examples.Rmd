@@ -26,22 +26,24 @@ library(dplyr)
 
 ```{r make_infra, eval= FALSE, echo=FALSE}
 
-lines = sf::read_sf("../sdca-data-prep/multipart_example.gpkg")
-points = sf::read_sf("../sdca-data-prep/point_example.gpkg")
+# lines = sf::read_sf("../sdca-data-prep/multipart_example.gpkg")
+# points = sf::read_sf("../sdca-data-prep/point_example.gpkg")
+# 
+# lines = lapply(lines$geometry, function(x){x})
+# points = lapply(points$geometry, function(x){x})
+# 
+# #infra = sf::st_geometrycollection(c(lines, points))
+# infra = sf::st_sfc(c(lines, points), crs = 4326)
+# infra = data.frame(infrastructure_type = c("transport","transport","onward_travel","transport","transport","transport"),
+#           mode_class = c("Rail","Rail","onward_travel","Rail","Rail","Rail"),
+#           intervention_class = c("New construction","New construction","onward_travel","New construction","New construction","New construction"),
+#           mode = c("High speed rail","High speed rail","onward_travel","High speed rail","High speed rail","High speed rail"),
+#           intervention = c("Viaduct","Viaduct","onward_travel","Station - at grade","Station - at grade","Station - at grade"),
+#           geometry = infra)
+# 
+# st_write(infra, "../inst/exdata/portishead.geojson")
+infra = read_sf("../data/map.geojson")
 
-lines = lapply(lines$geometry, function(x){x})
-points = lapply(points$geometry, function(x){x})
-
-#infra = sf::st_geometrycollection(c(lines, points))
-infra = sf::st_sfc(c(lines, points), crs = 4326)
-infra = data.frame(infrastructure_type = c("transport","transport","onward_travel","transport","transport","transport"),
-          mode_class = c("Rail","Rail","onward_travel","Rail","Rail","Rail"),
-          intervention_class = c("New construction","New construction","onward_travel","New construction","New construction","New construction"),
-          mode = c("High speed rail","High speed rail","onward_travel","High speed rail","High speed rail","High speed rail"),
-          intervention = c("Viaduct","Viaduct","onward_travel","Station - at grade","Station - at grade","Station - at grade"),
-          geometry = infra)
-
-st_write(infra, "../inst/exdata/portishead.geojson")
 ```
 
 
@@ -49,18 +51,18 @@ Step 2: Simulate the API returning the necessary data
 
 ```{r make_input, eval= FALSE, echo=FALSE}
 
-infra <- sf::read_sf("../inst/exdata/portishead.geojson")
 
-flow <- sf::read_sf("../../../ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
+
+flow <- geojsonsf::geojson_sf("../../../ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
 flow <- flow[flow$from != flow$to, ]
 buff <- sf::st_buffer(sf::st_combine(infra$geometry), 5000)
-desire <- flow[buff, op = sf::st_within]
+desire <- flow[buff, op = sf::st_intersects]
 #desire <- desire[desire$from != desire$to,]
 
 interventions <- read.csv("../../sdca-data/data_tables/interventions.csv")
-intervention_assets <- read.csv("../../sdca-data/data_tables/intervention_assets.csv")
-intervention_assets_parameters <- read.csv("../../sdca-data/data_tables/intervention_assets_parameters.csv")
-asset_components <- read.csv("../../sdca-data/data_tables/asset_components.csv")
+assets <- read.csv("../../sdca-data/data_tables/assets.csv")
+assets_parameters <- read.csv("../../sdca-data/data_tables/assets_parameters.csv")
+components <- read.csv("../../sdca-data/data_tables/components.csv")
 carbon_factors <- read.csv("../../sdca-data/data_tables/carbon_factors.csv")
 
 dir.create("tmp")
@@ -80,23 +82,25 @@ material_sites = material_sites %>%
   summarise(distance_km = round(distance[distance == min(distance)] / 1000,1))
 
 
-intervention_assets = intervention_assets[intervention_assets$intervention %in% infra$intervention,]
-intervention_assets_parameters = intervention_assets_parameters[intervention_assets_parameters$asset %in% intervention_assets$asset,]
-asset_components = asset_components[asset_components$intervention_asset %in% intervention_assets$asset, ]
-carbon_factors = carbon_factors[carbon_factors$cf_name %in% asset_components$cf_name, ]
+assets = assets[assets$intervention %in% infra$intervention,]
+assets_parameters = assets_parameters[assets_parameters$asset %in% assets$asset,]
+components = components[components$asset %in% assets$asset, ]
+carbon_factors = carbon_factors[carbon_factors$cf_name %in% components$cf_name, ]
 
 # Build example_json
 infra_json <- geojsonsf::sf_geojson(infra)
 desire_json <- geojsonsf::sf_geojson(desire)
 
-path_dem = "E:/Users/earmmor/GitHub/sdca-tool/sdca-data/UKdem.tif"
-path_landcover = "E:/Users/earmmor/GitHub/sdca-tool/sdca-data/landcover.tif"
+path_dem = "dem.tif"
+path_landcover = "landcover.tif"
+path_bedrock = "bedrock.tif"
+path_superficial = "superficial.tif"
 
-json = list(infra_json, intervention_assets, intervention_assets_parameters, asset_components, carbon_factors, desire_json, path_dem, path_landcover, material_sites)
-names(json) = c("user_input", "intervention_assets", "intervention_assets_parameters", "asset_components", "carbon_factors", "desire_lines", "path_dem","path_landcover", "material_sites")
+json = list(infra_json, assets, assets_parameters, components, carbon_factors, desire_json, path_dem, path_landcover, path_bedrock, path_superficial, material_sites)
+names(json) = c("user_input", "intervention_assets", "intervention_assets_parameters", "asset_components", "carbon_factors", "desire_lines", "path_dem","path_landcover","path_bedrock", "path_superficial", "material_sites")
 
 #json = jsonlite::toJSON(json)
-jsonlite::write_json(json,"../tests/testthat/portishead_example_r_input.geojson", pretty = TRUE)
+jsonlite::write_json(json,"../tests/testthat/bristol_cycling_example.json", pretty = TRUE)
 ```
 
 Step 3: Parse the API's data
