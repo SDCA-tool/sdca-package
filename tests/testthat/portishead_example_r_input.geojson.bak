@@ -74,7 +74,7 @@
       "tool_calculated_parameters": ""
     }
   ],
-  "assets_parameters": [
+  "intervention_assets_parameters": [
     {
       "asset": "Building",
       "parameter": "area",
@@ -217,7 +217,7 @@
       "default": 1
     }
   ],
-  "components": [
+  "asset_components": [
     {
       "intervention_asset": "Viaduct",
       "works_category_level_1": "Highways",
