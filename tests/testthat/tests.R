@@ -1,30 +1,14 @@
 # tests 
 args = readLines("portishead_example_r_input.geojson")
 args = paste(args, collapse = "")
-
-context("Simple test of parsing")
-
-test_that("test otp_list_clean", {
+test_that("Simple test of parsing", {
   res <- process_results(args)
   expect_is(res, "json")
 })
 
-args = readLines("example_r_input_old.json")
+args = readLines("bristol_cycling_example.json")
 args = paste(args, collapse = "")
-
-context("legacy test of parsing")
-
-test_that("test otp_list_clean", {
-  res <- process_results(args)
-  expect_is(res, "json")
-})
-
-args = readLines("bug_v2.json")
-args = paste(args, collapse = "")
-
-context("legacy test of parsing")
-
-test_that("test otp_list_clean", {
+test_that("Bristol cycling example", {
   res <- process_results(args)
   expect_is(res, "json")
 })

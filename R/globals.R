@@ -1,0 +1,1 @@
+globalVariables(c("emissions_factors", "climate_zones", "landcover_factors","intervention_id"))

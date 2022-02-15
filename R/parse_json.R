@@ -16,9 +16,9 @@ parse_json <- function(json, file = TRUE){
   } else {
     dat <- jsonlite::fromJSON(json, simplifyVector = TRUE)
   }
-  expected_names <- c("user_input","intervention_assets",
-                      "intervention_assets_parameters",
-                      "asset_components","carbon_factors","desire_lines",
+  expected_names <- c("user_input","assets",
+                      "assets_parameters",
+                      "components","carbon_factors","desire_lines",
                       "path_dem","path_landcover","material_sites")
   if(!all(expected_names %in% names(dat))){
     stop("Some objects are missing from the input JSON: ",

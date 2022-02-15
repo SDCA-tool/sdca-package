@@ -23,3 +23,28 @@
 #'
 #' @format A data frame with 37 rows and 4 variables:
 "landcover_factors"
+
+#' Emission factors for bedrock types
+#'
+#' Based on SDCA research
+#' 
+#' @format A data frame with 86 rows and 15 variables:
+"bedrock"
+
+
+#' Emission factors for superficial geology
+#'
+#' Based on SDCA research
+#' 
+#'
+#' @format A data frame with 8 rows and 16 variables:
+"superficial"
+
+
+#' Warm Temperate Wet Climate Zone boundary
+#'
+#' Based on SDCA research
+#' Approximate Warm Temperate Wet Climate Zone boundary in the UK
+#'
+#' @format A sf data.frame with one muliploygon
+"climate_zones"
