@@ -39,3 +39,12 @@
 #'
 #' @format A data frame with 8 rows and 16 variables:
 "superficial"
+
+
+#' Warm Temperate Wet Climate Zone boundary
+#'
+#' Based on SDCA research
+#' Approximate Warm Temperate Wet Climate Zone boundary in the UK
+#'
+#' @format A sf data.frame with one muliploygon
+"climate_zones"

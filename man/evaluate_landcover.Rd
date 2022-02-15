@@ -4,12 +4,10 @@
 \alias{evaluate_landcover}
 \title{Evaluate emissions from change in land cover}
 \usage{
-evaluate_landcover(infra, path_landcover, width = 19)
+evaluate_landcover(infra_data, width = 19)
 }
 \arguments{
-\item{infra}{a sf dataframe of linestrings}
-
-\item{path_landcover}{path to landcover map}
+\item{infra_data}{a data frame from `extract_rasters`}
 
 \item{width}{width of infrastructure assumed for lines}
 }

@@ -2,33 +2,36 @@
 #'
 #' @description Emissions produced by building over natural land
 #'
-#' @param infra a sf dataframe of linestrings
-#' @param path_landcover path to landcover map
+#' @param infra_data a data frame from `extract_rasters`
 #' @param width width of infrastructure assumed for lines
 #' @return a total emissions estimate in kgCO2
 #' @export
 
-evaluate_landcover <- function(infra, path_landcover, width = 19){
+evaluate_landcover <- function(infra_data, width = 19){
   
-  landcover <- stars::read_stars(path_landcover)
-  line_split <- sf::st_segmentize(infra, dfMaxLength = 50)
-  line_split <- sf::st_cast(line_split, "POINT")
+  # Identify climate Zones
+  utils::data("climate_zones", envir=environment())
   
-  landcover_types <- stars::st_extract(landcover, at = line_split)
-  names(landcover_types) <- c("landcover_id","geometry")
+  inter <- sf::st_intersects(infra_data, climate_zones)
+  inter <- lengths(inter)
+  infra_data$warm_climate <- inter > 0
   
-  landcover_factors <- NULL
-  utils::data("landcover_factors", envir=environment())
+  # Calculate distances
+  # TODO: We also do this for the cut/fill so wasted computation
+  coords <- sf::st_coordinates(infra_data)
+  infra_data <- sf::st_drop_geometry(infra_data)
+  infra_data$distance <- geodist::geodist(coords, sequential = TRUE, pad = TRUE)
   
-  landcover_types <- dplyr::left_join(landcover_types, 
-                                      landcover_factors, 
-                                      by = "landcover_id")
-  #TODO: Select correct region factors based on location
-  landcover_types$total_emissions <- 50 * width * landcover_types$cold_temp_wet
+  # Calculate emissions
+  infra_data$landcover_emissions <- ifelse(infra_data$warm_climate,
+                                            infra_data$distance * width * infra_data$warm_temp_wet,
+                                            infra_data$distance * width * infra_data$cold_temp_wet)
   
-  emissions_total <- sum(landcover_types$total_emissions, na.rm = TRUE)
+  emissions_total <- sum(infra_data$landcover_emissions, na.rm = TRUE)
   
+  # Convert from tonnes per hectare to kgCO2 per m2
+  emissions_total <- emissions_total / 10
   
+  emissions_total <- data.frame(emissions_total = emissions_total)
   return(emissions_total)
-  
 }

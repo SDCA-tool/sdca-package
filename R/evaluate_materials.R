@@ -4,6 +4,7 @@
 #'
 #' @param infra  data frame with infrastructure properties
 #' @param combined a pre-joined data frame
+#' @param material_sites nearest material site for project
 #' @return a list of data frames
 #' @examples
 #' \dontrun{
@@ -11,7 +12,7 @@
 #' }
 #' @export
 #' 
-cacualte_materials <- function(infra, combined){
+cacualte_materials <- function(infra, combined, material_sites){
   
   # Steps 
   # 1 - Calculate quantity of materials required and emission (A1-3)

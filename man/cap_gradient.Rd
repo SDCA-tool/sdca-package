@@ -4,12 +4,10 @@
 \alias{cap_gradient}
 \title{Allocate cut and fill with maximum gradient}
 \usage{
-cap_gradient(line, path_dem, max_gradient = 1.5)
+cap_gradient(raster_data, max_gradient = 1.5)
 }
 \arguments{
-\item{line}{a sf dataframe of linestrings}
-
-\item{path_dem}{path to dem}
+\item{raster_data}{a sf dataframe of points and data from the raster}
 
 \item{max_gradient}{maximum gradient as %}
 }

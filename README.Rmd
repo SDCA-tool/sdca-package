@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/SDCA-tool/sdca-package/workflows/R-CMD-check/badge.svg)](https://github.com/SDCA-tool/sdca-package/actions)
+  <!-- badges: end -->
+
 
 # SDCA
 

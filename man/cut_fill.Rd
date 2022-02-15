@@ -4,10 +4,12 @@
 \alias{cut_fill}
 \title{Infer cut and fill}
 \usage{
-cut_fill(elevations)
+cut_fill(raster_data, width = 19)
 }
 \arguments{
-\item{elevations}{a dataframe of elevation data}
+\item{raster_data}{a dataframe of from `extract_rasters()`}
+
+\item{width}{width of infrastrucutre}
 }
 \value{
 a dataframe of cut and fill.

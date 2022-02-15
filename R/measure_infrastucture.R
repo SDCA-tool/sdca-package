@@ -36,6 +36,28 @@ measure_infrastucture <- function(infra,
   # 3 - (conditional) estimate earthwork requirements
   # 4 - estimate land cover change and emissions
   
+  # Set up main rules
+  
+  # Skip the special onward travel case as no construction occurs
+  if(infra$infrastructure_type == "onward_travel"){
+    results = list(NULL, NULL, NULL, NULL)
+    names(results) = c("material_emissions", "materials_itemised", "landcover_emissions", "cut_fill_emissions")
+    return(results)
+  }
+  
+  
+  
+  # TODO: Not all lines nead cut_fill add logic
+  if(sf::st_geometry_type(infra) == "LINESTRING"){
+    do_cut_fill <- TRUE
+  } else {
+    do_cut_fill <- FALSE
+  }
+  
+  
+  
+  
+  
   # Step 1: Measure infrastructure and get data
   # R 3.6 Bug?
   infra <- as.data.frame(infra)
@@ -59,6 +81,7 @@ measure_infrastucture <- function(infra,
   components <- components[components$intervention_asset %in% assets$asset,]
   carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
   
+  # TODO: Method for no descrete data
   # Join together
   combined <- dplyr::left_join(assets, 
                                components, 
@@ -69,13 +92,13 @@ measure_infrastucture <- function(infra,
   
   
   # Materials Emissions
-  mat_res = cacualte_materials(infra, combined)
+  mat_res = cacualte_materials(infra, combined, material_sites)
   
   material_emissions <- mat_res$material_emissions
   materials_itemised <- mat_res$materials_itemised
   
   # Step 3: Calculate Earthworks
-  if(TRUE){
+  if(do_cut_fill){
     
     # Choose Max gradient as a %
     if(infra$mode_class == "Rail"){
@@ -84,41 +107,45 @@ measure_infrastucture <- function(infra,
       max_gradient = 8.3
     }
     
-    infra_data <- cap_gradient(infra_data, max_gradient = max_gradient)
+    gradient_data <- cap_gradient(infra_data, max_gradient = max_gradient)
     
     #Calculate the cut / fill emissions
-    cut_fill_emissions = cut_fill(infra_data, width = infra$width)
+    cut_fill_emissions = cut_fill(gradient_data, width = infra$width)
+  } else {
+    cut_fill_emissions = NULL
   }
   
+  # Step 4: Land Cover Emissions
+  landcover_emissions = evaluate_landcover(infra_data, width = infra$width)
   
-  #TODO finished up this fucntion with new strucutre and results
+  # Step Last: Put together the results and return.
   
   
   
-  results = list(headline, combined)
-  names(results) = c("headline","itemised")
+  results = list(material_emissions, materials_itemised, landcover_emissions, cut_fill_emissions)
+  names(results) = c("material_emissions", "materials_itemised", "landcover_emissions", "cut_fill_emissions")
   
   return(results)
   
 }
 
-get_asset_dimension <- function(asset_unit, 
-                                length_m,
-                                default_area,
-                                default_number){
-  weight = vapply(asset_unit, 
-                  get_asset_dimension_int, 
-                  FUN.VALUE = 1.1,
-                  USE.NAMES = FALSE)
-  return(weight * length_m)
-}
-
-get_asset_dimension_int <- function(unit){
-  if(unit == "km"){
-    return(0.001)
-  }
-  if(unit == "m"){
-    return(1)
-  }
-  return(0)
-}
+# get_asset_dimension <- function(asset_unit, 
+#                                 length_m,
+#                                 default_area,
+#                                 default_number){
+#   weight = vapply(asset_unit, 
+#                   get_asset_dimension_int, 
+#                   FUN.VALUE = 1.1,
+#                   USE.NAMES = FALSE)
+#   return(weight * length_m)
+# }
+# 
+# get_asset_dimension_int <- function(unit){
+#   if(unit == "km"){
+#     return(0.001)
+#   }
+#   if(unit == "m"){
+#     return(1)
+#   }
+#   return(0)
+# }

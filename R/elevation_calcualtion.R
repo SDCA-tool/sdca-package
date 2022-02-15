@@ -44,7 +44,7 @@ extract_rasters <- function(infra,
                             rast_landcover){
   
   line_split <- sf::st_segmentize(infra, dfMaxLength = 50)
-  line_split <- sf::st_cast(line_split, "POINT")
+  suppressWarnings(line_split <- sf::st_cast(line_split, "POINT"))
   
   vals_dem <- sf::st_drop_geometry(stars::st_extract(rast_dem, at = line_split))
   vals_bedrock <- sf::st_drop_geometry(stars::st_extract(rast_bedrock, at = line_split))
@@ -82,7 +82,7 @@ extract_rasters <- function(infra,
 #'
 #' @description extract elevations of a line
 #'
-#' @param elevations a dataframe of elevation data
+#' @param raster_data a dataframe of from `extract_rasters()`
 #' @param width width of infrastrucutre
 #' @return a dataframe of cut and fill.
 #' @export
@@ -293,6 +293,7 @@ cut_fill <- function(raster_data, width = 19){
 #' @param max_gradient maximum gradient as %
 #' @return a dataframe of heights
 #' @export
+
 cap_gradient <- function(raster_data, max_gradient = 1.5){
   
   coords <- sf::st_coordinates(raster_data)

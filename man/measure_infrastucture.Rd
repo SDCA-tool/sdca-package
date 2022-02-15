@@ -2,21 +2,50 @@
 % Please edit documentation in R/measure_infrastucture.R
 \name{measure_infrastucture}
 \alias{measure_infrastucture}
-\title{Measure Infrastructure characteristics}
+\title{Measure infrastructure}
 \usage{
 measure_infrastucture(
   infra,
-  path_dem = "D:/GitHub/SDCA-tool/sdca-data-prep/data/UK-dem-50m-4326-Int16.tif"
+  assets,
+  intervention_assets_parameters,
+  components,
+  carbon_factors,
+  material_sites,
+  rast_dem,
+  rast_bedrock,
+  rast_superficial,
+  rast_landcover
 )
 }
 \arguments{
-\item{infra}{a sf dataframe of infrastructure}
+\item{infra}{data frame with infrastructure properties}
 
-\item{path_dem}{path to the DEM raster}
+\item{assets}{a pre-subset data frame}
+
+\item{intervention_assets_parameters}{a pre-subset data frame}
+
+\item{components}{a pre-subset data frame}
+
+\item{carbon_factors}{a pre-subset data frame}
+
+\item{material_sites}{a data frame of the nearest material sites}
+
+\item{rast_dem}{path to dem}
+
+\item{rast_bedrock}{path to bedrock}
+
+\item{rast_superficial}{path to superfical}
+
+\item{rast_landcover}{path to landcover}
 }
 \value{
-a dataframe of
+a json string as a character
 }
 \description{
-Measre infrastrcutre dimensions
+Internal function that is to be run on row at a time
+}
+\examples{
+\dontrun{
+evaluate_materials()
+}
 }
