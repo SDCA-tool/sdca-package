@@ -14,7 +14,7 @@ The R Package for the SDCA Project
 
 Ensure you have system dependencies:
 
-`sudo install -y libssl-dev libcurl4-openssl-dev libxml2-dev
+`sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
 libudunits2-dev libgdal-dev`
 
 and R dependences:
