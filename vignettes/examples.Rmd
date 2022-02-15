@@ -50,7 +50,7 @@ library(dplyr)
 Step 2: Simulate the API returning the necessary data
 
 ```{r make_input, eval= FALSE, echo=FALSE}
-infra = read_sf("../data/map.geojson")
+infra = read_sf("../data/map2.geojson")
 
 
 flow <- geojsonsf::geojson_sf("../../../ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
@@ -99,7 +99,7 @@ path_superficial = "superficial.tif"
 json = list(infra_json, assets, assets_parameters, components, carbon_factors, desire_json, path_dem, path_landcover, path_bedrock, path_superficial, material_sites)
 names(json) = c("user_input", "assets", "assets_parameters", "components", "carbon_factors", "desire_lines", "path_dem","path_landcover","path_bedrock", "path_superficial", "material_sites")
 
-jsonlite::write_json(json,"../tests/testthat/bristol_cycling_example.json", 
+jsonlite::write_json(json,"../tests/testthat/overbridge_example.json", 
                      pretty = TRUE, simplifyDataFrame = FALSE, simplifyVector = FALSE, na = "null")
 ```
 

@@ -24,8 +24,9 @@ cacualte_materials <- function(infra, combined, material_sites){
   combined$emissions_total <- combined$quantity_total * combined$carbon_factor
   
   #A1-3 Emissions & A5 Emissions
-  A1_3_emissions = sum(combined$emissions_total, na.rm = TRUE)
-  A5_emissions = sum(combined$A5 * infra$length, na.rm = TRUE)
+  A1_3_emissions = sum(combined$emissions_total, na.rm = TRUE) + 
+    sum(combined$no_granular_data_A1.A3, na.rm = TRUE)
+  A5_emissions = sum(combined$A5 * infra$length, na.rm = TRUE) 
   
   #A4 Emissions
   combined = dplyr::left_join(combined, material_sites, by = c("material_type" = "Material_Types"))
@@ -38,12 +39,14 @@ cacualte_materials <- function(infra, combined, material_sites){
   combined$A4 = (combined$distance_km * combined$quantity_total / 1000 * 0.00010749 +
                         combined$distance_km * 0.0000874) * 1000
   
-  A4_emissions = sum(combined$A4, na.rm = TRUE)
+  A4_emissions = sum(combined$A4, na.rm = TRUE) + 
+    sum(combined$no_granular_data_A4, na.rm = TRUE)
   
   #B4 Assume same as construction * replacements
   combined$B4 = combined$A4 * combined$replacements_during_lifetime
   
-  B4_emissions = sum(combined$B4, na.rm = TRUE)
+  B4_emissions = sum(combined$B4, na.rm = TRUE) + 
+    sum(combined$no_granular_data_B4, na.rm = TRUE)
   
   # Make Detailed Emission Table
   combined = combined[,c("intervention","asset","item",
