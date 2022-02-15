@@ -50,9 +50,9 @@ process_results = function(args, file = FALSE) {
   
   construction_emissions = lapply(infra_list, 
                            measure_infrastucture, 
-                           assets = dat$intervention_assets,
-                           intervention_assets_parameters = dat$assets_parameters,
-                           components = dat$asset_components,
+                           assets = dat$assets,
+                           assets_parameters = dat$assets_parameters,
+                           components = dat$components,
                            carbon_factors = dat$carbon_factors,
                            material_sites = dat$material_sites,
                            rast_dem = rast_dem,

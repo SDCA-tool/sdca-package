@@ -7,7 +7,7 @@
 measure_infrastucture(
   infra,
   assets,
-  intervention_assets_parameters,
+  assets_parameters,
   components,
   carbon_factors,
   material_sites,
@@ -22,7 +22,7 @@ measure_infrastucture(
 
 \item{assets}{a pre-subset data frame}
 
-\item{intervention_assets_parameters}{a pre-subset data frame}
+\item{assets_parameters}{a pre-subset data frame}
 
 \item{components}{a pre-subset data frame}
 

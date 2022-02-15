@@ -4,7 +4,7 @@
 #'
 #' @param infra  data frame with infrastructure properties
 #' @param assets a pre-subset data frame
-#' @param intervention_assets_parameters a pre-subset data frame
+#' @param assets_parameters a pre-subset data frame
 #' @param components a pre-subset data frame
 #' @param carbon_factors a pre-subset data frame
 #' @param material_sites a data frame of the nearest material sites
@@ -21,7 +21,7 @@
 
 measure_infrastucture <- function(infra,
                                assets,
-                               intervention_assets_parameters,
+                               assets_parameters,
                                components, 
                                carbon_factors,
                                material_sites,
