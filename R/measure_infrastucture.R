@@ -78,12 +78,17 @@ measure_infrastucture <- function(infra,
   infra$length <- as.numeric(sf::st_length(infra))
   
   #TODO; Get correct with of infrastructure
-  if(nrow(assets_parameters) > 0){
-    widths <- assets_parameters[assets_parameters$parameter == "width",]
-    infra$width = widths$default[1]
+  if("data.frame" %in% class(assets_parameters)){
+    if(nrow(assets_parameters) > 0){
+      widths <- assets_parameters[assets_parameters$parameter == "width",]
+      infra$width = widths$default[1]
+    } else {
+      infra$width = 19
+    }
   } else {
     infra$width = 19
   }
+  
   
   # Get data from the rasters
   infra_data <- extract_rasters(infra, 
