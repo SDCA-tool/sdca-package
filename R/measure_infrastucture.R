@@ -39,8 +39,21 @@ measure_infrastucture <- function(infra,
   # Drop unneeded info
   assets <- assets[assets$intervention %in% infra$intervention,]
   components <- components[components$asset %in% assets$asset,]
-  carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
-  assets_parameters <- assets_parameters[assets_parameters$asset %in% assets$asset,]
+  if("data.frame" %in% class(carbon_factors)){
+    carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
+  } else{
+    carbon_factors = data.frame(cf_name = NA,
+                                material_type = NA,
+                                carbon_factor = NA,
+                                carbon_factor_units = NA,
+                                input_unit = NA,
+                                category = NA)
+  }
+  if("data.frame" %in% class(assets_parameters)){
+    assets_parameters <- assets_parameters[assets_parameters$asset %in% assets$asset,]
+  }
+  
+  
   
   # Set up main rules
   
@@ -87,6 +100,8 @@ measure_infrastucture <- function(infra,
   combined <- dplyr::left_join(assets, 
                                components, 
                                by = c("asset" = "asset"))
+  
+  
   combined <- dplyr::left_join(combined, 
                                carbon_factors, 
                                by = c("cf_name" = "cf_name"))
