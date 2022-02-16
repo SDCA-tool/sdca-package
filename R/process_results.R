@@ -21,7 +21,7 @@ process_results = function(args, file = FALSE) {
   checkmate::assert_data_frame(dat$assets, min.rows = 1)
   checkmate::assert_data_frame(dat$assets_parameters, min.rows = 0)
   checkmate::assert_data_frame(dat$components, min.rows = 1)
-  checkmate::assert_data_frame(dat$carbon_factors, min.rows = 1)
+  #checkmate::assert_data_frame(dat$carbon_factors, min.rows = 1) # Can be empty
   checkmate::assert_data_frame(dat$material_sites, nrows = 11, ncol = 2)
   checkmate::assert_character(dat$path_dem, len = 1)
   checkmate::assert_file_exists(dat$path_dem)
