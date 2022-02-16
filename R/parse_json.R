@@ -10,7 +10,7 @@
 #' parse_json("jsonhere")
 #' }
 #' @export
-parse_json <- function(json, file = TRUE){
+parse_json <- function(json, file = FALSE){
   if(file){
     dat <- jsonlite::read_json(json, simplifyVector = TRUE)
   } else {

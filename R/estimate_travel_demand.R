@@ -5,14 +5,14 @@
 #' @param infra a sf dataframe of infrastucutre
 #' @param desire as sf dataframe of desire lines
 #' @param stop_buff_dist distance in metres to buffer stops
-#' @param infra_buff_dist distance in metres to buffer infrastructure
+#' @param infra_buff_dist_ratio distance in metres to buffer infrastructure
 #' @return a dataframe of
 #' @export
 
 estimate_travel_demand <- function(infra, 
                                    desire, 
                                    stop_buff_dist = 3000,
-                                   infra_buff_dist = 3000){
+                                   infra_buff_dist_ratio = 7){
   
   desire = desire[desire$from != desire$to, ]
   
@@ -56,6 +56,13 @@ estimate_travel_demand <- function(infra,
     #Get straight line from infra
     infra_straight = linestring_to_line(infra_lines)
     
+    # infra_buff_dist is ratio of length
+    infra_buff_dist = sum(as.numeric(sf::st_length(infra))) / infra_buff_dist_ratio
+    if(infra_buff_dist < 3000){
+      infra_buff_dist = 3000
+    }
+    
+    
     buff_straight = sf::st_buffer(infra_straight, 
                                   infra_buff_dist,
                                   endCapStyle = "SQUARE")
@@ -78,6 +85,10 @@ estimate_travel_demand <- function(infra,
   
   desire$length_km <- as.numeric(sf::st_length(desire)) / 1000
   desire <- sf::st_drop_geometry(desire)
+  
+  #If active travel only consider short desire lines
+  
+  
   
   desire$from <- NULL
   desire$to <- NULL
