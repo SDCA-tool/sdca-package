@@ -3,3 +3,9 @@
 CODE_OF_CONDUCT.md
 README.Rmd
 ^\.github$
+tests/testthat/bedrock.tif.zip
+tests/testthat/superficial.tif.zip
+tests/testthat/landcover.tif.zip
+tests/testthat/UKdem.tif.zip
+data/map.geojson
+data/map2.geojson

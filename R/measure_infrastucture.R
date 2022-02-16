@@ -40,6 +40,7 @@ measure_infrastucture <- function(infra,
   assets <- assets[assets$intervention %in% infra$intervention,]
   components <- components[components$asset %in% assets$asset,]
   carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
+  assets_parameters <- assets_parameters[assets_parameters$asset %in% assets$asset,]
   
   # Set up main rules
   
@@ -51,7 +52,7 @@ measure_infrastucture <- function(infra,
   }
   
   # TODO: Not all lines nead cut_fill add logic
-  if(sf::st_geometry_type(infra) == "LINESTRING"){
+  if(any(grepl("cutting", infra$intervention),grepl("embankment", infra$intervention))){
     do_cut_fill <- TRUE
   } else {
     do_cut_fill <- FALSE
@@ -64,7 +65,12 @@ measure_infrastucture <- function(infra,
   infra$length <- as.numeric(sf::st_length(infra))
   
   #TODO; Get correct with of infrastructure
-  infra$width = 19
+  if(nrow(assets_parameters) > 0){
+    widths <- assets_parameters[assets_parameters$parameter == "width",]
+    infra$width = widths$default[1]
+  } else {
+    infra$width = 19
+  }
   
   # Get data from the rasters
   infra_data <- extract_rasters(infra, 
@@ -107,7 +113,15 @@ measure_infrastucture <- function(infra,
     #Calculate the cut / fill emissions
     cut_fill_emissions = cut_fill(gradient_data, width = infra$width)
   } else {
-    cut_fill_emissions = NULL
+    cut_fill_emissions = data.frame(
+      total_cut = 0,
+      total_fill = 0,
+      carbon_cut = 0,
+      carbon_processing = 0,
+      carbon_fill = 0,
+      material_disposal = 0,
+      material_brought_in = 0
+    )
   }
   
   # Step 4: Land Cover Emissions
