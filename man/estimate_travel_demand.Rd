@@ -8,7 +8,7 @@ estimate_travel_demand(
   infra,
   desire,
   stop_buff_dist = 3000,
-  infra_buff_dist = 3000
+  infra_buff_dist_ratio = 7
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ estimate_travel_demand(
 
 \item{stop_buff_dist}{distance in metres to buffer stops}
 
-\item{infra_buff_dist}{distance in metres to buffer infrastructure}
+\item{infra_buff_dist_ratio}{distance in metres to buffer infrastructure}
 }
 \value{
 a dataframe of

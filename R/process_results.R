@@ -94,6 +94,11 @@ process_results = function(args, file = FALSE) {
   res_demand = estimate_travel_demand(infra = dat$user_input,
                                       desire = dat$desire_lines)
   
+  demand_emissions = res_demand$emissions_total
+  # Convert to tonnes for website
+  demand_emissions$`changeemissions-low` <- round(demand_emissions$`changeemissions-low` / 1000)
+  demand_emissions$`changeemissions-average` <- round(demand_emissions$`changeemissions-average` / 1000)
+  demand_emissions$`changeemissions-high` <- round(demand_emissions$`changeemissions-high` / 1000)
   
   emissions = c(material_emissions_total$A1_3_emissions,
                 material_emissions_total$A4_emissions,
@@ -107,23 +112,55 @@ process_results = function(args, file = FALSE) {
                 0,
                 material_emissions_total$B4_emissions,
                 0,0,0,0,
-                res_demand$emissions_increase * 120,
+                res_demand$emissions_increase,
+                0,0,0,0)
+  
+  emissions_low = c(material_emissions_total$A1_3_emissions,
+                material_emissions_total$A4_emissions,
+                material_emissions_total$A5_emissions +
+                  cut_fill_emissions_total$carbon_cut +
+                  cut_fill_emissions_total$carbon_processing +
+                  cut_fill_emissions_total$carbon_fill +
+                  landcover_emissions_total$emissions_total,
+                0,
+                1,
+                0,
+                material_emissions_total$B4_emissions,
+                0,0,0,0,
+                res_demand$emissions_increase_low,
+                0,0,0,0)
+  
+  emissions_high = c(material_emissions_total$A1_3_emissions,
+                material_emissions_total$A4_emissions,
+                material_emissions_total$A5_emissions +
+                  cut_fill_emissions_total$carbon_cut +
+                  cut_fill_emissions_total$carbon_processing +
+                  cut_fill_emissions_total$carbon_fill +
+                  landcover_emissions_total$emissions_total,
+                0,
+                1,
+                0,
+                material_emissions_total$B4_emissions,
+                0,0,0,0,
+                res_demand$emissions_increase_high,
                 0,0,0,0)
   
   emissions <- emissions / 1000 # COnvert to Tonnes CO2 for output
+  emissions_low <- emissions_low / 1000
+  emissions_high <- emissions_high / 1000
   
   pas2080 <- data.frame(
     pas2080_code = c("A1-3","A4","A5",
                      "B1","B2","B3","B4","B5","B6","B7","B8","B9",
                      "C1","C2","C3","C4"),
     emissions = emissions,
-    emissions_high = emissions*1.1,
-    emissions_low = emissions*0.9,
+    emissions_high = emissions_high,
+    emissions_low = emissions_low,
     confidence = c("medium","medium","medium",
                    "not calculated","medium","medium","not calculated","not calculated",
                    "not calculated","not calculated","not calculated","low",
                    "not calculated","not calculated","not calculated","not calculated"),
-    notes = "notes go here"
+    notes = ""
   )
   pas2080$emissions <- round(pas2080$emissions)
   pas2080$emissions_high <- round(pas2080$emissions_high)
@@ -131,14 +168,27 @@ process_results = function(args, file = FALSE) {
   
   timeseries <- data.frame(year = 2022:2100,
                            emissions = round(c(sum(emissions[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net/1000,
-                                         rep(res_demand$emissions_net/1000, 78))))
+                                         rep(res_demand$emissions_net/1000, 78))),
+                           emissions_low = round(c(sum(emissions_low[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_low/1000,
+                                               rep(res_demand$emissions_net_low/1000, 78))),
+                           emissions_high = round(c(sum(emissions_high[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_high/1000,
+                                               rep(res_demand$emissions_net_high/1000, 78))))
   timeseries$emissions_cumulative <- cumsum(timeseries$emissions)
+  timeseries$emissions_cumulative_low <- cumsum(timeseries$emissions_low)
+  timeseries$emissions_cumulative_high <- cumsum(timeseries$emissions_high)
   
   emissions_whole_life <- sum(timeseries$emissions, na.rm = TRUE)
-  
+  emissions_whole_life_low <- sum(timeseries$emissions_low, na.rm = TRUE)
+  emissions_whole_life_high <- sum(timeseries$emissions_high, na.rm = TRUE)
   
   payback_time <- round(sum(emissions[c(1:11,13:16)], na.rm = TRUE) / 
                           ( - res_demand$emissions_net/1000))
+  payback_time_low <- round(sum(emissions_low[c(1:11,13:16)], na.rm = TRUE) / 
+                          ( - res_demand$emissions_net_low/1000))
+  payback_time_high <- round(sum(emissions_high[c(1:11,13:16)], na.rm = TRUE) / 
+                              ( - res_demand$emissions_net_high/1000))
+  
+  
   if(payback_time < 0){
     payback_time <- 9999999
   }
@@ -158,8 +208,6 @@ process_results = function(args, file = FALSE) {
   }
   
   
-  
-  
   # Geometry to be plotted on the map
   geometry <- sf::st_sfc(list(sf::st_point(c(0,51.5))), crs = 4326)
   geometry <- sf::st_as_sf(data.frame(id = 1,
@@ -174,12 +222,16 @@ process_results = function(args, file = FALSE) {
   
   results <- list(netzero_compatible,
                   payback_time,
+                  payback_time_low,
+                  payback_time_high,
                   emissions_whole_life,
+                  emissions_whole_life_low,
+                  emissions_whole_life_high,
                   comments,
                   processing_time,
                   pas2080,
                   timeseries,
-                  res_demand$emissions_total,
+                  demand_emissions,
                   materials_itemised,
                   landcover_emissions,
                   cut_fill_emissions,
@@ -187,7 +239,11 @@ process_results = function(args, file = FALSE) {
   
   names(results) <- c("netzero_compatible",
                       "payback_time",
+                      "payback_time_low",
+                      "payback_time_high",
                       "emissions_whole_life",
+                      "emissions_whole_life_low",
+                      "emissions_whole_life_high",
                       "comments",
                       "processing_time",
                       "pas2080",

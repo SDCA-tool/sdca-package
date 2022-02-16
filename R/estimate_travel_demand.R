@@ -87,8 +87,9 @@ estimate_travel_demand <- function(infra,
   desire <- sf::st_drop_geometry(desire)
   
   #If active travel only consider short desire lines
-  
-  
+  if(all(infra$mode_class %in% c("Active travel","onward_travel"))){
+    desire <- desire[desire$length_km < 10,]
+  }
   
   desire$from <- NULL
   desire$to <- NULL
@@ -101,94 +102,132 @@ estimate_travel_demand <- function(infra,
   # Estimate New mode splits
   mode_shifts <- NULL
   utils::data("mode_shifts", envir=environment())
-  mode_shifts <- mode_shifts[mode_shifts$infrastructure == "railway", ]
+  mode_shifts <- mode_shifts[mode_shifts$mode %in% infra$mode, ]
+  mode_shifts <- mode_shifts[mode_shifts$intervention_class %in% infra$intervention_class, ]
   
-  # Estimate new number of trips
-  desire$cycle_after <- round(desire$cycle_before * (mode_shifts$cycle + 100)/100, 0)
-  desire$drive_after <- round(desire$drive_before * (mode_shifts$drive + 100)/100, 0)
-  desire$passenger_after <- round(desire$passenger_before * (mode_shifts$passenger + 100)/100, 0)
-  desire$walk_after <- round(desire$walk_before * (mode_shifts$walk + 100)/100, 0)
-  desire$rail_after <- round(desire$rail_before * (mode_shifts$rail + 100)/100, 0)
-  desire$bus_after <- round(desire$bus_before * (mode_shifts$bus + 100)/100, 0)
-  desire$lgv_after <- round(desire$lgv_before * (mode_shifts$lgv + 100)/100, 0)
-  desire$hgv_after <- round(desire$hgv_before * (mode_shifts$hgv + 100)/100, 0)
+  #Loop over each mode
+  for(md in c("walk","cycle","drive","passenger","rail","bus")){
+    induceddemand_low = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_low[mode_shifts$travel_mode == md]
+    induceddemand_average = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_average[mode_shifts$travel_mode == md]
+    induceddemand_high = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_high[mode_shifts$travel_mode == md]
+    
+    modeshift_low = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_low[mode_shifts$travel_mode == md]
+    modeshift_average = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_average[mode_shifts$travel_mode == md]
+    modeshift_high = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_high[mode_shifts$travel_mode == md]
+    
+    desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_before")] + modeshift_low
+    desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_before")] + modeshift_average
+    desire[,paste0(md,"_after-high")] = desire[,paste0(md,"_before")] + modeshift_high
+    
+    desire[,paste0(md,"_induceddemand-low")] = induceddemand_low
+    desire[,paste0(md,"_induceddemand-average")] = induceddemand_average
+    desire[,paste0(md,"_induceddemand-high")] = induceddemand_high
+    
+    #Change in number of travellers
+    desire[,paste0(md,"_change-low")] = desire[,paste0(md,"_after-low")] - desire[,paste0(md,"_before")]
+    desire[,paste0(md,"_change-average")] = desire[,paste0(md,"_after-average")] - desire[,paste0(md,"_before")]
+    desire[,paste0(md,"_change-high")] = desire[,paste0(md,"_after-high")] - desire[,paste0(md,"_before")]
+  }
   
-  # Change in number of trips
-  desire$cycle_change <- desire$cycle_after - desire$cycle_before
-  desire$drive_change <- desire$drive_after - desire$drive_before
-  desire$passenger_change <- desire$passenger_after - desire$passenger_before
-  desire$walk_change <- desire$walk_after - desire$walk_before
-  desire$rail_change <- desire$rail_after - desire$rail_before
-  desire$bus_change <- desire$bus_after - desire$bus_before
-  desire$lgv_change <- desire$lgv_after - desire$lgv_before
-  desire$hgv_change <- desire$hgv_after - desire$hgv_before
+  # Get the total change in trips and add to the infrastructure mode type
+  desire$total_shifted_travellers_low = rowSums(desire[,grepl("_change-low",names(desire))])
+  desire$total_shifted_travellers_average = rowSums(desire[,grepl("_change-average",names(desire))])
+  desire$total_shifted_travellers_high = rowSums(desire[,grepl("_change-high",names(desire))])
   
-  # Move those trips to rail
-  # TODO: Relace with mulimodal solution
-  desire$rail_change <- desire$rail_change - 
-    desire$cycle_change - 
-    desire$drive_change - 
-    desire$passenger_change - 
-    desire$walk_change - 
-    desire$bus_change -
-    desire$lgv_change -
-    desire$hgv_change
+  # Add the new travellers to the correct mode
+  md = unique(mode_shifts$mode)
+  if(md %in% c("High speed rail","Rail","Light Rail")){
+    md = "rail"
+  } else if(md %in% c("Walking")){
+    md = "walk"
+  } else if (md %in% c("Bus")){
+    md = "bus"
+  } else if (md %in% c("Road - Minor","Road - Major")){
+    md = "drive"
+  } else if (md %in% c("Bicycle")){
+    md = "cycle"
+  } else {
+    stop("Unknown mode for demand modelling")
+  }
   
-  # Add some induced demand
-  induced_demand <- 10 # 10% induced demand on top of mode shift
+  # Best case is lots of mode shift and little induced demand
+  # For cars special case as mode shift is bad if high
+  # Worst case is the opposite
+  if(md == "drive"){
+    desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_after-low")] + 
+      desire$total_shifted_travellers_high + desire[,paste0(md,"_induceddemand-high")]
+    desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_after-average")] + 
+      desire$total_shifted_travellers_average + desire[,paste0(md,"_induceddemand-average")]
+    desire[,paste0(md,"_after-high")] = desire[,paste0(md,"_after-high")] + 
+      desire$total_shifted_travellers_low + desire[,paste0(md,"_induceddemand-low")]
+  } else {
+    desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_after-low")] - 
+      desire$total_shifted_travellers_low + desire[,paste0(md,"_induceddemand-high")]
+    desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_after-average")] - 
+      desire$total_shifted_travellers_average + desire[,paste0(md,"_induceddemand-average")]
+    desire[,paste0(md,"_after-high")] = desire[,paste0(md,"_after-high")] - 
+      desire$total_shifted_travellers_high + desire[,paste0(md,"_induceddemand-low")]
+  }
   
-  desire$rail_change <- round(desire$rail_change * (1 + induced_demand/100),0)
+  # Update the change in travellers
+  desire[,paste0(md,"_change-low")] = desire[,paste0(md,"_after-low")] - desire[,paste0(md,"_before")]
+  desire[,paste0(md,"_change-average")] = desire[,paste0(md,"_after-average")] - desire[,paste0(md,"_before")]
+  desire[,paste0(md,"_change-high")] = desire[,paste0(md,"_after-high")] - desire[,paste0(md,"_before")]
   
-  desire$rail_after <- desire$rail_change - desire$rail_before
+  # Estimate change in km and emissions
+  # 1.4 circuity factor
+  for(md in c("walk","cycle","drive","passenger","rail","bus")){
+    desire[,paste0(md,"_changekm-low")] = desire[,paste0(md,"_change-low")] * desire$length_km * 1.4
+    desire[,paste0(md,"_changekm-average")] = desire[,paste0(md,"_change-average")] * desire$length_km * 1.4 
+    desire[,paste0(md,"_changekm-high")] = desire[,paste0(md,"_change-high")] * desire$length_km * 1.4
+  }
   
-  # Change in trip km, x1.4 to account for circuity
-  desire$cycle_changekm <- desire$cycle_change * desire$length_km * 1.4
-  desire$drive_changekm <- desire$drive_change * desire$length_km * 1.4
-  desire$passenger_changekm <- desire$passenger_change * desire$length_km * 1.4
-  desire$walk_changekm <- desire$walk_change * desire$length_km * 1.4
-  desire$rail_changekm <- desire$rail_change * desire$length_km * 1.4
-  desire$bus_changekm <- desire$bus_change * desire$length_km * 1.4
-  desire$lgv_changekm <- desire$lgv_change * desire$length_km * 1.4
-  desire$hgv_changekm <- desire$hgv_change * desire$length_km * 1.4
   
   # Emission factors kg/km DEFRA 2020
   utils::data("emissions_factors", envir=environment())
-  # emissions_factors <- data.frame(cycle = 0,
-  #                           drive = 0.17431,
-  #                           passenger = 0,
-  #                           walk = 0,
-  #                           rail = 0.03549 ,
-  #                           bus = 0.10227,
-  #                           lgv = 0.24116,
-  #                           hgv = 0.86407)
   
-  # Change in emissions 
-  desire$cycle_changeemissions = desire$cycle_changekm * emissions_factors$cycle * 365
-  desire$drive_changeemissions = desire$drive_changekm * emissions_factors$drive * 365
-  desire$passenger_changeemissions = desire$passenger_changekm * emissions_factors$passenger * 365
-  desire$walk_changeemissions = desire$walk_changekm * emissions_factors$walk * 365
-  desire$rail_changeemissions = desire$rail_changekm * emissions_factors$rail * 365
-  desire$bus_changeemissions = desire$bus_changekm * emissions_factors$bus * 365
-  desire$lgv_changeemissions = desire$lgv_changekm * emissions_factors$lgv * 365
-  desire$hgv_changeemissions = desire$hgv_changekm * emissions_factors$hgv * 365
-  
-  
+  # Also switch to years of emissions
+  for(md in c("walk","cycle","drive","passenger","rail","bus")){
+    desire[,paste0(md,"_changeemissions-low")] = desire[,paste0(md,"_changekm-low")] * emissions_factors[,md] * 365
+    desire[,paste0(md,"_changeemissions-average")] = desire[,paste0(md,"_changekm-average")] * emissions_factors[,md] * 365
+    desire[,paste0(md,"_changeemissions-high")] = desire[,paste0(md,"_changekm-high")] * emissions_factors[,md] * 365
+  }
+
   desire$length_km <- NULL
   
   # Total Emissions in kgco2e / year
-  emissions_total <- dplyr::summarise_all(desire, .funs = sum)
+  emissions_total <- dplyr::summarise_all(desire, .funs = sum, na.rm = TRUE)
   emissions_total <- tidyr::pivot_longer(emissions_total, 
                           cols = tidyr::everything(),
                           names_to = c("mode",".value"),
                           names_pattern = "(.*)_(.*)")
   
-  emissions_increase <- sum(emissions_total$changeemissions[emissions_total$changeemissions > 0])
-  emissions_decrease <- sum(emissions_total$changeemissions[emissions_total$changeemissions < 0])
+  emissions_total <- emissions_total[emissions_total$mode != "total_shifted_travellers",]
+  emissions_total <- emissions_total[,c("mode","before","after-low","after-average","after-high",
+                                        "changeemissions-low","changeemissions-average","changeemissions-high")]
+  
+  emissions_increase <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` > 0], na.rm = TRUE)
+  emissions_decrease <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` < 0], na.rm = TRUE)
   emissions_net <- emissions_increase + emissions_decrease
   
+  emissions_increase_low <- sum(emissions_total$`changeemissions-low`[emissions_total$`changeemissions-low` > 0], na.rm = TRUE)
+  emissions_decrease_low <- sum(emissions_total$`changeemissions-low`[emissions_total$`changeemissions-low` < 0], na.rm = TRUE)
+  emissions_net_low <- emissions_increase_low + emissions_decrease_low
   
-  res <- list(emissions_increase, emissions_decrease, emissions_net,emissions_total)
-  names(res) <- c("emissions_increase", "emissions_decrease", "emissions_net","emissions_total")
+  emissions_increase_high <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` > 0], na.rm = TRUE)
+  emissions_decrease_high <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` < 0], na.rm = TRUE)
+  emissions_net_high <- emissions_increase_high + emissions_decrease_high
+  
+  emissions_total[2:ncol(emissions_total)] <- lapply(emissions_total[2:ncol(emissions_total)], round)
+  
+  res <- list(emissions_increase, emissions_decrease, emissions_net,
+              emissions_increase_low, emissions_decrease_low, emissions_net_low,
+              emissions_increase_high, emissions_decrease_high, emissions_net_high,
+              emissions_total)
+  names(res) <- c("emissions_increase", "emissions_decrease", "emissions_net",
+                  "emissions_increase_low", "emissions_decrease_low", "emissions_net_low",
+                  "emissions_increase_high", "emissions_decrease_high", "emissions_net_high",
+                  "emissions_total")
   
   return(res)
 }
