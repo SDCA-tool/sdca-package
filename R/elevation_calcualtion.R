@@ -234,6 +234,17 @@ cut_fill <- function(raster_data, width = 19){
     fill_general_propotion <- 0
   }
   
+  if(is.nan(fill_start_propotion)){
+    fill_start_propotion <- 0
+  }
+  if(is.nan(fill_cap_propotion)){
+    fill_cap_propotion <- 0
+  }
+  if(is.nan(fill_general_propotion)){
+    fill_general_propotion <- 0
+  }
+  
+  
   if(fill_start_propotion > 1){
     fill_start_propotion <- 1
   }
