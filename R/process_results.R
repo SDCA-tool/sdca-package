@@ -287,7 +287,10 @@ process_results = function(args, file = FALSE) {
                       "cut_fill_emissions",
                       "geometry")
   
-  results <- jsonlite::toJSON(results)
+  results <- jsonlite::toJSON(results,
+                              simplifyDataFrame = FALSE, 
+                              simplifyVector = FALSE, 
+                              na = "null")
   return(results)
 }
 
