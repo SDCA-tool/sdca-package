@@ -201,7 +201,7 @@ process_results = function(args, file = FALSE) {
   
   if(is.character(payback_time)){
     netzero_compatible <- "no"
-    comments <- "Project permenantly increases the UK's carbon footprint"
+    comments <- "Project permanently increases the UK's carbon footprint"
   } else if(payback_time < 18){
     netzero_compatible <- "yes"
     comments <- "Project pays back well before 2050"
