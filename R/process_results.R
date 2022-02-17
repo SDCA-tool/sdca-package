@@ -190,20 +190,32 @@ process_results = function(args, file = FALSE) {
   
   
   if(payback_time < 0){
-    payback_time <- 9999999
+    payback_time <- "never"
   }
-  netzero_compatible <- ifelse(payback_time > 28,"no","yes")
-  if(payback_time < 18){
+  if(payback_time_low < 0){
+    payback_time <- "never"
+  }
+  if(payback_time_high < 0){
+    payback_time <- "never"
+  }
+  
+  if(is.character(payback_time)){
+    netzero_compatible <- "no"
+    comments <- "Project permenantly increases the UK's carbon footprint"
+  } else if(payback_time < 18){
+    netzero_compatible <- "yes"
     comments <- "Project pays back well before 2050"
   } else if(payback_time < 28){
+    netzero_compatible <- "yes"
     comments <- "Project pays back slowly but before 2050"
   } else if(payback_time < 38){
+    netzero_compatible <- "no"
     comments <- "Project pays back slowly but after 2050"
   } else if(payback_time < 150){
+    netzero_compatible <- "no"
     comments <- "Project pays back very slowly"
-  } else if(payback_time == 9999999){
-    comments <- "Project permenantly increases the UK's carbon footprint"
   } else{
+    netzero_compatible <- "no"
     comments <- "Project never pays back"
   }
   
