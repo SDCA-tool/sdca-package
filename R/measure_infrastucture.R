@@ -103,7 +103,7 @@ measure_infrastucture <- function(infra,
     if(nrow(water_check) == 0){
       water_check <- NULL
     } else {
-      water_check$message = "Infrastructure crosses water, considered a bridge or tunnel"
+      water_check$message = "Infrastructure crosses water, consider a bridge or tunnel"
       water_check$type = "warning"
       water_check$id = seq_len(nrow(water_check))
       water_check <- water_check[,c("id","message","type")]
