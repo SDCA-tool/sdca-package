@@ -97,6 +97,31 @@ measure_infrastucture <- function(infra,
                                 rast_superficial, 
                                 rast_landcover)
   
+  # Water checks
+  if(!any(grepl("bridge", infra$intervention),grepl("tunnel", infra$intervention))){
+    water_check <- infra_data[infra_data$landcover %in% c(39:44),]
+    if(nrow(water_check) == 0){
+      water_check <- NULL
+    } else {
+      water_check$message = "Infrastructure crosses water, considered a bridge or tunnel"
+      water_check$type = "warning"
+      water_check$id = seq_len(nrow(water_check))
+      water_check <- water_check[,c("id","message","type")]
+      
+      # Cluster points so there are not too many
+      dist <- sf::st_distance(water_check)
+      dist <- matrix(as.numeric(dist), ncol = nrow(water_check))
+      
+      # cluster all points using a hierarchical clustering approach
+      hc <- stats::hclust(stats::as.dist(dist), method="complete")
+      water_check$cluster <- stats::cutree(hc, h = 1000)
+      water_check <- water_check[!duplicated(water_check$cluster),]
+      water_check$cluster <- NULL
+    }
+  } else {
+    water_check <- NULL
+  }
+  
   
   # Step 2: Estimate Materials required
   
@@ -151,8 +176,8 @@ measure_infrastucture <- function(infra,
   
   
   
-  results = list(material_emissions, materials_itemised, landcover_emissions, cut_fill_emissions)
-  names(results) = c("material_emissions", "materials_itemised", "landcover_emissions", "cut_fill_emissions")
+  results = list(material_emissions, materials_itemised, landcover_emissions, cut_fill_emissions, water_check)
+  names(results) = c("material_emissions", "materials_itemised", "landcover_emissions", "cut_fill_emissions","geometry_errors")
   
   return(results)
   

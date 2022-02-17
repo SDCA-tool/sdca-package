@@ -72,6 +72,8 @@ process_results = function(args, file = FALSE) {
   cut_fill_emissions <- lapply(construction_emissions, function(x){x$cut_fill_emissions})
   cut_fill_emissions <- dplyr::bind_rows(cut_fill_emissions, .id = "intervention_id")
   
+  geometry_errors <- lapply(construction_emissions, function(x){x$geometry_errors})
+  geometry_errors <- dplyr::bind_rows(geometry_errors)
   
   # Add Up construction emissions
   material_emissions_total = material_emissions
@@ -242,13 +244,11 @@ process_results = function(args, file = FALSE) {
   
   
   # Geometry to be plotted on the map
-  geometry <- sf::st_sfc(list(sf::st_point(c(0,51.5))), crs = 4326)
-  geometry <- sf::st_as_sf(data.frame(id = 1,
-                                      message= "Test Geometry",
-                                      type = "warning",
-                                      geometry = geometry))
-  
-  geometry <- geojsonsf::sf_geojson(geometry)
+  if(nrow(geometry_errors) > 0){
+    geometry_errors <- geojsonsf::sf_geojson(geometry_errors)
+  } else {
+    geometry_errors <- NULL
+  }
   
   t_end <- Sys.time()
   processing_time <- as.numeric(difftime(t_end, t_start, units = "secs"))
@@ -268,7 +268,7 @@ process_results = function(args, file = FALSE) {
                   materials_itemised,
                   landcover_emissions,
                   cut_fill_emissions,
-                  geometry)
+                  geometry_errors)
   
   names(results) <- c("netzero_compatible",
                       "payback_time",
