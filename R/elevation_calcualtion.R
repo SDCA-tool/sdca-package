@@ -206,11 +206,11 @@ cut_fill <- function(raster_data, width = 19){
   
   material_onsite = c(fill_start_net, fill_cap_net, fill_general_net)
   material_onsite = ifelse(material_onsite > 0,material_onsite,0)
-  material_onsite = sum(material_onsite, na.rm = TRUE) * 2000 # assumed density
+  material_onsite = sum(material_onsite, na.rm = TRUE) * 1592 # assumed density
   
   material_offsite = c(fill_start_net, fill_cap_net, fill_general_net)
   material_offsite = ifelse(material_offsite < 0,-material_offsite,0)
-  material_offsite = sum(material_offsite, na.rm = TRUE) * 2000 #assumed density
+  material_offsite = sum(material_offsite, na.rm = TRUE) * mean(raster_data$br_density_bank, na.rm = TRUE) #assumed average density
   
   # Calculate the carbon for the processing
   # Only process the proportion of the cut used in the fill
