@@ -91,8 +91,29 @@ process_results = function(args, file = FALSE) {
   
   # Calculate Mode Shift and Induced Demand
   # Emissions in kgCO2 per year
-  res_demand = estimate_travel_demand(infra = dat$user_input,
-                                      desire = dat$desire_lines)
+  if(nrow(dat$desire_lines) > 0){
+    res_demand = estimate_travel_demand(infra = dat$user_input,
+                                        desire = dat$desire_lines)
+  } else {
+    res_demand <- list(0, 0, 0,
+                0, 0, 0,
+                0, 0, 0,
+                data.frame(Mode = c("walk","cycle","lgv","drive","passenger","rail","bus","hgv"),	
+                           Before	 = 0,
+                           `after-low` = 0,
+                           `after-average` = 0,
+                           `after-high` = 0,
+                           `changeemissions-low` = 0,
+                           `changeemissions-average` = 0,
+                           `changeemissions-high` = 0))
+    names(res_demand) <- c("emissions_increase", "emissions_decrease", "emissions_net",
+                    "emissions_increase_low", "emissions_decrease_low", "emissions_net_low",
+                    "emissions_increase_high", "emissions_decrease_high", "emissions_net_high",
+                    "emissions_total")
+  }
+  
+  
+  
   
   demand_emissions = res_demand$emissions_total
   # Convert to tonnes for website
