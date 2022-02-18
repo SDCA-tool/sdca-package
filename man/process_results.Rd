@@ -4,12 +4,14 @@
 \alias{process_results}
 \title{Process results}
 \usage{
-process_results(args, file = FALSE)
+process_results(args, file = FALSE, local = FALSE)
 }
 \arguments{
 \item{args}{a json string as a character}
 
 \item{file}{logical, is json a file path}
+
+\item{local}{logical, are we running locally or on the server}
 }
 \value{
 a json string as a character

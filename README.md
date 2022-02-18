@@ -31,10 +31,22 @@ remotes::install_github("SDCA-tool/sdca-package")
 
 ## Use
 
+The primary use case of the package is working within the SDCA website.
+However users can test the code locally by drawing an intervention on
+the [website](dev.carbon.place), downloading the GeoJSON then.
+
 ``` r
 library(sdca)
-test_function(5)
-# 25
-test_function_fail(5)
-# Error in test_function_fail(5) : This function will fail
+dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
+
+# Change the paths to the rasters
+# Note that the package only comes with sample rasters for Bristol
+# Full rasters are at https://github.com/SDCA-tool/sdca-data/releases/tag/map_data
+dat$path_dem <- paste0(.libPaths()[1],"/sdca/tests/testthat/dem.tif")
+dat$path_landcover <- paste0(.libPaths()[1],"/sdca/tests/testthat/landcover.tif")
+dat$path_bedrock <- paste0(.libPaths()[1],"/sdca/tests/testthat/bedrock.tif")
+dat$path_superficial <- paste0(.libPaths()[1],"/sdca/tests/testthat/superficial.tif")
+
+# Process the input data using local = TRUE
+results <- process_results(dat, local = TRUE)
 ```

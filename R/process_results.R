@@ -4,17 +4,24 @@
 #'
 #' @param args a json string as a character
 #' @param file logical, is json a file path
+#' @param local logical, are we running locally or on the server
 #' @return a json string as a character 
 #' @examples
 #' \dontrun{
 #' process_results("jsonhere")
 #' }
 #' @export
-process_results = function(args, file = FALSE) {
+process_results = function(args, file = FALSE, local = FALSE) {
   
   t_start <- Sys.time()
+  
   # Step 1: Parse the Input JSON
-  dat = parse_json(args, file)
+  if(local){
+    dat = args
+  } else {
+    dat = parse_json(args, file = file)
+  }
+  
   
   # Step 2: Check inputs
   checkmate::assert_data_frame(dat$user_input, min.rows = 1)
