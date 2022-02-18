@@ -228,8 +228,8 @@ estimate_travel_demand <- function(infra,
   emissions_decrease_low <- sum(emissions_total$`changeemissions_low`[emissions_total$`changeemissions_low` < 0], na.rm = TRUE)
   emissions_net_low <- emissions_increase_low + emissions_decrease_low
   
-  emissions_increase_high <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` > 0], na.rm = TRUE)
-  emissions_decrease_high <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` < 0], na.rm = TRUE)
+  emissions_increase_high <- sum(emissions_total$changeemissions_high[emissions_total$changeemissions_high > 0], na.rm = TRUE)
+  emissions_decrease_high <- sum(emissions_total$changeemissions_high[emissions_total$changeemissions_high < 0], na.rm = TRUE)
   emissions_net_high <- emissions_increase_high + emissions_decrease_high
   
   emissions_total[2:ncol(emissions_total)] <- lapply(emissions_total[2:ncol(emissions_total)], round)
