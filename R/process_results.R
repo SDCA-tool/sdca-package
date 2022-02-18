@@ -190,7 +190,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
     emissions_high = emissions_high,
     emissions_low = emissions_low,
     confidence = c("medium","medium","medium",
-                   "not calculated","medium","not calcualted","medium","not calculated",
+                   "not calculated","medium","not calculated","medium","not calculated",
                    "not calculated","not calculated","not calculated","low",
                    "not calculated","not calculated","not calculated","not calculated")
   )
