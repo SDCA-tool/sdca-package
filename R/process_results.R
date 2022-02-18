@@ -190,10 +190,9 @@ process_results = function(args, file = FALSE, local = FALSE) {
     emissions_high = emissions_high,
     emissions_low = emissions_low,
     confidence = c("medium","medium","medium",
-                   "not calculated","medium","medium","not calculated","not calculated",
+                   "not calculated","medium","not calcualted","medium","not calculated",
                    "not calculated","not calculated","not calculated","low",
-                   "not calculated","not calculated","not calculated","not calculated"),
-    notes = ""
+                   "not calculated","not calculated","not calculated","not calculated")
   )
   pas2080$emissions <- round(pas2080$emissions)
   pas2080$emissions_high <- round(pas2080$emissions_high)
