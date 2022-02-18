@@ -221,13 +221,13 @@ process_results = function(args, file = FALSE) {
   
   
   if(payback_time < 0){
-    payback_time <- "never"
+    payback_time <- "Never"
   }
   if(payback_time_low < 0){
-    payback_time <- "never"
+    payback_time <- "Never"
   }
   if(payback_time_high < 0){
-    payback_time <- "never"
+    payback_time <- "Never"
   }
   
   if(is.character(payback_time)){
