@@ -48,6 +48,10 @@ cacualte_materials <- function(infra, combined, material_sites){
   B4_emissions = sum(combined$B4, na.rm = TRUE) + 
     sum(combined$no_granular_data_B4, na.rm = TRUE) * infra$length
   
+  # B2 emissions - non granualr data only?
+  B2_emissions = sum(combined$no_granular_data_B4, na.rm = TRUE) * infra$length
+  
+  
   # Make Detailed Emission Table
   combined = combined[,c("intervention","asset","item",
                          "quantity_total","input_unit.x",
@@ -62,6 +66,7 @@ cacualte_materials <- function(infra, combined, material_sites){
   headline = data.frame(A1_3_emissions = A1_3_emissions,
                         A4_emissions = A4_emissions,
                         A5_emissions = A5_emissions,
+                        B2_emissions = B2_emissions,
                         B4_emissions = B4_emissions,
                         stringsAsFactors = FALSE)
   

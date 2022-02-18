@@ -141,7 +141,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_fill +
                   landcover_emissions_total$emissions_total,
                 0,
-                1,
+                material_emissions_total$B2_emissions,
                 0,
                 material_emissions_total$B4_emissions,
                 0,0,0,0,
@@ -156,7 +156,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_fill +
                   landcover_emissions_total$emissions_total,
                 0,
-                1,
+                material_emissions_total$B2_emissions,
                 0,
                 material_emissions_total$B4_emissions,
                 0,0,0,0,
@@ -171,7 +171,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_fill +
                   landcover_emissions_total$emissions_total,
                 0,
-                1,
+                material_emissions_total$B2_emissions,
                 0,
                 material_emissions_total$B4_emissions,
                 0,0,0,0,
