@@ -70,6 +70,10 @@ estimate_travel_demand <- function(infra,
     # plot(desire$geometry)
     desire = desire[buff_straight, op = sf::st_within,]
     
+    if(nrow(desire) == 0){
+      return(make_empty_demand())
+    } 
+    
     # Get Bearings
     infra_straight$bearing = line_to_bearing(infra_straight)
     desire$bearing = line_to_bearing(desire)
@@ -81,7 +85,14 @@ estimate_travel_demand <- function(infra,
     # plot(desire["parallel"])
     # plot(infra_lines$geometry, add = TRUE, col = "red", lwd = 3)
     desire <- desire[desire$parallel,]
+    
   }
+  
+  # Check again for empty results
+  if(nrow(desire) == 0){
+    return(make_empty_demand())
+  }
+  
   
   desire$length_km <- as.numeric(sf::st_length(desire)) / 1000
   desire <- sf::st_drop_geometry(desire)

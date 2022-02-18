@@ -55,7 +55,7 @@ infra = read_sf("../data/map2.geojson")
 
 flow <- geojsonsf::geojson_sf("../../../ITSleeds/NTEM2OD/data/NTEM/NTEM_desire_lines.geojson")
 flow <- flow[flow$from != flow$to, ]
-buff <- sf::st_buffer(sf::st_combine(infra$geometry), 5000)
+buff <- sf::st_buffer(sf::st_combine(infra$geometry), 3000)
 desire <- flow[buff, op = sf::st_intersects]
 #desire <- desire[desire$from != desire$to,]
 
