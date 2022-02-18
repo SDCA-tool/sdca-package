@@ -30,9 +30,11 @@ geojson_api <- function(path,
   text <- curl::curl_fetch_memory(url)
   text <- rawToChar(text$content)
   
-  asjson <- jsonlite::fromJSON(text)
+  dat <- jsonlite::fromJSON(text)
+  dat$user_input <- geojsonsf::geojson_sf(dat$user_input)
+  dat$desire_lines <- geojsonsf::geojson_sf(dat$desire_lines)
   
-  return(asjson)
+  return(dat)
   
 }
 

@@ -100,18 +100,26 @@ process_results = function(args, file = FALSE) {
     res_demand <- list(0, 0, 0,
                 0, 0, 0,
                 0, 0, 0,
-                data.frame(Mode = c("walk","cycle","lgv","drive","passenger","rail","bus","hgv"),	
-                           Before	 = 0,
-                           `after-low` = 0,
-                           `after-average` = 0,
-                           `after-high` = 0,
-                           `changeemissions-low` = 0,
-                           `changeemissions-average` = 0,
-                           `changeemissions-high` = 0))
+                data.frame(mode = c("walk","cycle","lgv","drive","passenger","rail","bus","hgv"),	
+                           before	 = 0,
+                           after_low = 0,
+                           after_average = 0,
+                           after_high = 0,
+                           changeemissions_low = 0,
+                           changeemissions_average = 0,
+                           changeemissions_high = 0))
     names(res_demand) <- c("emissions_increase", "emissions_decrease", "emissions_net",
                     "emissions_increase_low", "emissions_decrease_low", "emissions_net_low",
                     "emissions_increase_high", "emissions_decrease_high", "emissions_net_high",
                     "emissions_total")
+    # Make an error message
+    demand_check <- sf::st_centroid(sf::st_combine(dat$user_input))
+    demand_check <- sf::st_as_sf(data.frame(id = 1,
+                                            message = "Could not find any travel demand in this location, perhaps the area is too remote",
+                                            type = "error",
+                                            geometry = demand_check
+                                            ))
+    geometry_errors = rbind(geometry_errors, demand_check)
   }
   
   
@@ -119,9 +127,9 @@ process_results = function(args, file = FALSE) {
   
   demand_emissions = res_demand$emissions_total
   # Convert to tonnes for website
-  demand_emissions$`changeemissions-low` <- round(demand_emissions$`changeemissions-low` / 1000)
-  demand_emissions$`changeemissions-average` <- round(demand_emissions$`changeemissions-average` / 1000)
-  demand_emissions$`changeemissions-high` <- round(demand_emissions$`changeemissions-high` / 1000)
+  demand_emissions$changeemissions_low <- round(demand_emissions$changeemissions_low / 1000)
+  demand_emissions$changeemissions_average <- round(demand_emissions$changeemissions_average / 1000)
+  demand_emissions$changeemissions_high <- round(demand_emissions$changeemissions_high / 1000)
   
   emissions = c(material_emissions_total$A1_3_emissions,
                 material_emissions_total$A4_emissions,

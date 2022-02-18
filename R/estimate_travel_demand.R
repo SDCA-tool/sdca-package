@@ -205,17 +205,20 @@ estimate_travel_demand <- function(infra,
   emissions_total <- emissions_total[emissions_total$mode != "total_shifted_travellers",]
   emissions_total <- emissions_total[,c("mode","before","after-low","after-average","after-high",
                                         "changeemissions-low","changeemissions-average","changeemissions-high")]
+  names(emissions_total) <- c("mode","before","after_low","after_average","after_high",
+                              "changeemissions_low","changeemissions_average","changeemissions_high")
   
-  emissions_increase <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` > 0], na.rm = TRUE)
-  emissions_decrease <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` < 0], na.rm = TRUE)
+  
+  emissions_increase <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` > 0], na.rm = TRUE)
+  emissions_decrease <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` < 0], na.rm = TRUE)
   emissions_net <- emissions_increase + emissions_decrease
   
-  emissions_increase_low <- sum(emissions_total$`changeemissions-low`[emissions_total$`changeemissions-low` > 0], na.rm = TRUE)
-  emissions_decrease_low <- sum(emissions_total$`changeemissions-low`[emissions_total$`changeemissions-low` < 0], na.rm = TRUE)
+  emissions_increase_low <- sum(emissions_total$`changeemissions_low`[emissions_total$`changeemissions_low` > 0], na.rm = TRUE)
+  emissions_decrease_low <- sum(emissions_total$`changeemissions_low`[emissions_total$`changeemissions_low` < 0], na.rm = TRUE)
   emissions_net_low <- emissions_increase_low + emissions_decrease_low
   
-  emissions_increase_high <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` > 0], na.rm = TRUE)
-  emissions_decrease_high <- sum(emissions_total$`changeemissions-average`[emissions_total$`changeemissions-average` < 0], na.rm = TRUE)
+  emissions_increase_high <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` > 0], na.rm = TRUE)
+  emissions_decrease_high <- sum(emissions_total$`changeemissions_average`[emissions_total$`changeemissions_average` < 0], na.rm = TRUE)
   emissions_net_high <- emissions_increase_high + emissions_decrease_high
   
   emissions_total[2:ncol(emissions_total)] <- lapply(emissions_total[2:ncol(emissions_total)], round)
