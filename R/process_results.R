@@ -117,7 +117,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                                             type = "error",
                                             geometry = demand_check
     ))
-    geometry_errors = rbind(geometry_errors, demand_check)
+    if(nrow(geometry_errors) > 0){
+      geometry_errors <- rbind(geometry_errors, demand_check)
+    } else{
+      geometry_errors <- demand_check
+    }
+    
+    
   }
   
   
