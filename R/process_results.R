@@ -209,9 +209,20 @@ process_results = function(args, file = FALSE, local = FALSE) {
   timeseries$emissions_cumulative_low <- cumsum(timeseries$emissions_low)
   timeseries$emissions_cumulative_high <- cumsum(timeseries$emissions_high)
   
-  emissions_whole_life <- sum(timeseries$emissions, na.rm = TRUE)
-  emissions_whole_life_low <- sum(timeseries$emissions_low, na.rm = TRUE)
-  emissions_whole_life_high <- sum(timeseries$emissions_high, na.rm = TRUE)
+  # Headline Results
+  
+  emissions_upfront <- sum(pas2080$emissions[1:4], na.rm = TRUE)
+  emissions_upfront_low <- sum(pas2080$emissions_low[1:4], na.rm = TRUE)
+  emissions_upfront_high <- sum(pas2080$emissions_high[1:4], na.rm = TRUE)
+  
+  emissions_whole_life <- sum(pas2080$emissions, na.rm = TRUE)
+  emissions_whole_life_low <- sum(pas2080$emissions_low, na.rm = TRUE)
+  emissions_whole_life_high <- sum(pas2080$emissions_high, na.rm = TRUE)
+  
+  emissions_whole_life_benefits <- sum(timeseries$emissions, na.rm = TRUE)
+  emissions_whole_life_benefits_low <- sum(timeseries$emissions_low, na.rm = TRUE)
+  emissions_whole_life_benefits_high <- sum(timeseries$emissions_high, na.rm = TRUE)
+  
   
   payback_time <- round(sum(emissions[c(1:11,13:16)], na.rm = TRUE) / 
                           ( - res_demand$emissions_net/1000))
@@ -266,9 +277,15 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   payback_time,
                   payback_time_low,
                   payback_time_high,
+                  emissions_upfront,
+                  emissions_upfront_low,
+                  emissions_upfront_high,
                   emissions_whole_life,
                   emissions_whole_life_low,
                   emissions_whole_life_high,
+                  emissions_whole_benefits_life,
+                  emissions_whole_benefits_life_low,
+                  emissions_whole_benefits_life_high,
                   comments,
                   processing_time,
                   pas2080,
@@ -283,9 +300,15 @@ process_results = function(args, file = FALSE, local = FALSE) {
                       "payback_time",
                       "payback_time_low",
                       "payback_time_high",
+                      "emissions_upfront",
+                      "emissions_upfront_low",
+                      "emissions_upfront_high",
                       "emissions_whole_life",
                       "emissions_whole_life_low",
                       "emissions_whole_life_high",
+                      "emissions_whole_benefits_life",
+                      "emissions_whole_benefits_life_low",
+                      "emissions_whole_benefits_life_high",
                       "comments",
                       "processing_time",
                       "pas2080",
