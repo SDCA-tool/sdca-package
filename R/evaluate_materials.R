@@ -20,7 +20,9 @@ cacualte_materials <- function(infra, combined, material_sites){
   # 3 - Calculate emissions from contribution process (A5)
   # 4 - Calculate emissions from replacements over lifetime (B4)
   
-  combined$quantity_total <- combined$quantity * infra$length
+  combined$quantity_total <- ifelse(combined$input_unit.x == "number",
+                                    combined$quantity,
+                                    combined$quantity * infra$length)
   combined$emissions_total <- combined$quantity_total * combined$carbon_factor
   
   #A1-3 Emissions & A5 Emissions

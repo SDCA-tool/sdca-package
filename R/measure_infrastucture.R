@@ -126,9 +126,6 @@ measure_infrastucture <- function(infra,
   
   # Step 2: Estimate Materials required
   # Join together
-  
-  
-  
   combined <- dplyr::left_join(assets, 
                                components, 
                                by = c("asset" = "asset"))
