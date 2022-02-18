@@ -38,6 +38,7 @@ measure_infrastucture <- function(infra,
   
   # Drop unneeded info
   assets <- assets[assets$intervention %in% infra$intervention,]
+  assets <- assets[assets$include == 1,]
   components <- components[components$asset %in% assets$asset,]
   if("data.frame" %in% class(carbon_factors)){
     carbon_factors <- carbon_factors[carbon_factors$cf_name %in% components$cf_name,]
@@ -127,6 +128,9 @@ measure_infrastucture <- function(infra,
   
   # TODO: Method for no descrete data
   # Join together
+  
+  
+  
   combined <- dplyr::left_join(assets, 
                                components, 
                                by = c("asset" = "asset"))

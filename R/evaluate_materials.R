@@ -25,7 +25,7 @@ cacualte_materials <- function(infra, combined, material_sites){
   
   #A1-3 Emissions & A5 Emissions
   A1_3_emissions = sum(combined$emissions_total, na.rm = TRUE) + 
-    sum(combined$no_granular_data_A1.A3, na.rm = TRUE) * infra$length
+    sum(combined$no_granular_data_A1_A3, na.rm = TRUE) * infra$length
   A5_emissions = sum(combined$A5 * infra$length, na.rm = TRUE) 
   
   #A4 Emissions
