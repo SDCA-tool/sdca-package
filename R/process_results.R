@@ -247,7 +247,7 @@ process_results = function(args, file = FALSE) {
   if(nrow(geometry_errors) > 0){
     geometry_errors <- geojsonsf::sf_geojson(geometry_errors)
   } else {
-    geometry_errors <- NULL
+    geometry_errors <- '{"type": "FeatureCollection","features": []}'
   }
   
   t_end <- Sys.time()
