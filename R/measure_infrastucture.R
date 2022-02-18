@@ -125,8 +125,6 @@ measure_infrastucture <- function(infra,
   
   
   # Step 2: Estimate Materials required
-  
-  # TODO: Method for no descrete data
   # Join together
   
   
@@ -140,6 +138,13 @@ measure_infrastucture <- function(infra,
                                carbon_factors, 
                                by = c("cf_name" = "cf_name"))
   
+  # TODO: Temp fix
+  if(any("no_granular_data_A1-A3" %in% names(combined))){
+    combined$no_granular_data_A1_A3 <- combined$`no_granular_data_A1-A3`
+  }
+  if(any("no_granular_data_A1.A3" %in% names(combined))){
+    combined$no_granular_data_A1_A3 <- combined$`no_granular_data_A1.A3`
+  }
   
   # Materials Emissions
   mat_res = cacualte_materials(infra, combined, material_sites)
