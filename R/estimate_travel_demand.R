@@ -99,7 +99,7 @@ estimate_travel_demand <- function(infra,
   
   #If active travel only consider short desire lines
   if(all(infra$mode_class %in% c("Active travel","onward_travel"))){
-    desire <- desire[desire$length_km < 10,]
+    desire <- desire[desire$length_km < 5,]
   }
   
   desire$from <- NULL
