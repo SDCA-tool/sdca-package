@@ -49,18 +49,16 @@ The primary use case of the package is working within the SDCA website. However 
 
 ```{r use, eval=FALSE}
 library(sdca)
-dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
+download_rasters() #first time only
 
-# Change the paths to the rasters
-# Note that the package only comes with sample rasters for Bristol
-# Full rasters are at https://github.com/SDCA-tool/sdca-data/releases/tag/map_data
-dat$path_dem <- paste0(.libPaths()[1],"/sdca/tests/testthat/dem.tif")
-dat$path_landcover <- paste0(.libPaths()[1],"/sdca/tests/testthat/landcover.tif")
-dat$path_bedrock <- paste0(.libPaths()[1],"/sdca/tests/testthat/bedrock.tif")
-dat$path_superficial <- paste0(.libPaths()[1],"/sdca/tests/testthat/superficial.tif")
+# Send a design to the API to get data
+dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
 
 # Process the input data using local = TRUE
 results <- process_results(dat, local = TRUE)
+
+# Convert results into R format
+results <- jsonlite::fromJSON(results)
 
 ```
 

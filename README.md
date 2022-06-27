@@ -1,6 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SDCA-tool/sdca-package/workflows/R-CMD-check/badge.svg)](https://github.com/SDCA-tool/sdca-package/actions)
@@ -14,8 +13,7 @@ The R Package for the SDCA Project
 
 Ensure you have system dependencies:
 
-`sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
-libudunits2-dev libgdal-dev`
+`sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev libudunits2-dev libgdal-dev`
 
 and R dependences:
 
@@ -37,16 +35,14 @@ the [website](dev.carbon.place), downloading the GeoJSON then.
 
 ``` r
 library(sdca)
-dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
+download_rasters() #first time only
 
-# Change the paths to the rasters
-# Note that the package only comes with sample rasters for Bristol
-# Full rasters are at https://github.com/SDCA-tool/sdca-data/releases/tag/map_data
-dat$path_dem <- paste0(.libPaths()[1],"/sdca/tests/testthat/dem.tif")
-dat$path_landcover <- paste0(.libPaths()[1],"/sdca/tests/testthat/landcover.tif")
-dat$path_bedrock <- paste0(.libPaths()[1],"/sdca/tests/testthat/bedrock.tif")
-dat$path_superficial <- paste0(.libPaths()[1],"/sdca/tests/testthat/superficial.tif")
+# Send a design to the API to get data
+dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
 
 # Process the input data using local = TRUE
 results <- process_results(dat, local = TRUE)
+
+# Convert results into R format
+results <- jsonlite::fromJSON(results)
 ```

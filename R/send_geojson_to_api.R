@@ -17,22 +17,35 @@ geojson_api <- function(path,
                         url = "https://dev.carbon.place/api/v1/locations.json?geojson=",
                         showinput = TRUE){
   # Reag GEOJSON
-  json <- geojsonsf::geojson_sf(path)
-  json <- geojsonsf::sf_geojson(json)
+  #json <- geojsonsf::geojson_sf(path)
+  #json <- geojsonsf::sf_geojson(json)
+  
+  json = readLines(path)
+  json = gsub("\t","",json, fixed = TRUE)
+  json = paste(json, collapse = "")
+  json = utils::URLencode(json, reserved = TRUE)
   
   # Build URL
-  url <- paste0(url,json)
+  url2 <- paste0(url,json)
   if(showinput){
-    url <- paste0(url,"&showinput=true")
+    url2 <- paste0(url2,"&showinput=true")
   }
-  url <- utils::URLencode(url)
+  #url2 <- utils::URLencode(url2, reserved = TRUE)
   
-  text <- curl::curl_fetch_memory(url)
+  # text <- httr::GET(url2)
+  # text <- httr::content(text)
+  text <- curl::curl_fetch_memory(url2)
   text <- rawToChar(text$content)
   
   dat <- jsonlite::fromJSON(text)
   dat$user_input <- geojsonsf::geojson_sf(dat$user_input)
   dat$desire_lines <- geojsonsf::geojson_sf(dat$desire_lines)
+  
+  # Change raster paths
+  dat$path_dem <- paste0(.libPaths()[1],"/sdca/exdata/UKdem.tif")
+  dat$path_landcover <- paste0(.libPaths()[1],"/sdca/exdata/landcover.tif")
+  dat$path_bedrock <- paste0(.libPaths()[1],"/sdca/exdata/bedrock.tif")
+  dat$path_superficial <- paste0(.libPaths()[1],"/sdca/exdata/superficial.tif")
   
   return(dat)
   

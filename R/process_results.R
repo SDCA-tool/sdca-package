@@ -133,13 +133,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
   demand_emissions$changeemissions_average <- round(demand_emissions$changeemissions_average / 1000)
   demand_emissions$changeemissions_high <- round(demand_emissions$changeemissions_high / 1000)
   
-  emissions = c(material_emissions_total$A1_3_emissions,
+  emissions = c(landcover_emissions_total$emissions_total,
+                 material_emissions_total$A1_3_emissions,
                 material_emissions_total$A4_emissions,
                 material_emissions_total$A5_emissions +
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
-                  cut_fill_emissions_total$carbon_fill +
-                  landcover_emissions_total$emissions_total,
+                  cut_fill_emissions_total$carbon_fill,
                 0,
                 material_emissions_total$B2_emissions,
                 0,
@@ -148,13 +148,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                 res_demand$emissions_increase,
                 0,0,0,0)
   
-  emissions_low = c(material_emissions_total$A1_3_emissions,
+  emissions_low = c(landcover_emissions_total$emissions_total,
+                     material_emissions_total$A1_3_emissions,
                 material_emissions_total$A4_emissions,
                 material_emissions_total$A5_emissions +
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
-                  cut_fill_emissions_total$carbon_fill +
-                  landcover_emissions_total$emissions_total,
+                  cut_fill_emissions_total$carbon_fill,
                 0,
                 material_emissions_total$B2_emissions,
                 0,
@@ -163,13 +163,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                 res_demand$emissions_increase_low,
                 0,0,0,0)
   
-  emissions_high = c(material_emissions_total$A1_3_emissions,
+  emissions_high = c(landcover_emissions_total$emissions_total,
+                      material_emissions_total$A1_3_emissions,
                 material_emissions_total$A4_emissions,
                 material_emissions_total$A5_emissions +
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
-                  cut_fill_emissions_total$carbon_fill +
-                  landcover_emissions_total$emissions_total,
+                  cut_fill_emissions_total$carbon_fill,
                 0,
                 material_emissions_total$B2_emissions,
                 0,
@@ -183,13 +183,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
   emissions_high <- emissions_high / 1000
   
   pas2080 <- data.frame(
-    pas2080_code = c("A1-3","A4","A5",
+    pas2080_code = c("A0","A1-3","A4","A5",
                      "B1","B2","B3","B4","B5","B6","B7","B8","B9",
                      "C1","C2","C3","C4"),
     emissions = emissions,
     emissions_high = emissions_high,
     emissions_low = emissions_low,
-    confidence = c("medium","medium","medium",
+    confidence = c("medium","medium","medium","medium",
                    "not calculated","medium","not calculated","medium","not calculated",
                    "not calculated","not calculated","not calculated","low",
                    "not calculated","not calculated","not calculated","not calculated")
