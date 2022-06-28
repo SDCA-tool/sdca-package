@@ -194,9 +194,9 @@ process_results = function(args, file = FALSE, local = FALSE) {
                    "not calculated","not calculated","not calculated","low",
                    "not calculated","not calculated","not calculated","not calculated")
   )
-  pas2080$emissions <- round(pas2080$emissions)
-  pas2080$emissions_high <- round(pas2080$emissions_high)
-  pas2080$emissions_low <- round(pas2080$emissions_low)
+  pas2080$emissions <- dplyr::if_else(pas2080$emissions > 2,round(pas2080$emissions), round(pas2080$emissions, 2))
+  pas2080$emissions_high <- dplyr::if_else(pas2080$emissions_high > 2,round(pas2080$emissions_high), round(pas2080$emissions_high, 2))
+  pas2080$emissions_low <- dplyr::if_else(pas2080$emissions_low > 2,round(pas2080$emissions_low), round(pas2080$emissions_low, 2))
   
   timeseries <- data.frame(year = 2022:2100,
                            emissions = round(c(sum(emissions[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net/1000,
