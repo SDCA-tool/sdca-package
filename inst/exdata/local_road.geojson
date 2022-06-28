@@ -1,0 +1,32 @@
+{
+	"_timestamp": 1656446804288,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 33,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Road",
+				"mode": "Local",
+				"intervention_class": "New construction",
+				"intervention_name": "New local road",
+				"intervention": "local_road"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						-1.507524,
+						53.799731
+					],
+					[
+						-1.526681,
+						53.810233
+					]
+				]
+			}
+		}
+	]
+}

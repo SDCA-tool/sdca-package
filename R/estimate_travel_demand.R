@@ -152,6 +152,10 @@ estimate_travel_demand <- function(infra,
   
   names(desire)[1:8] <- paste0(names(desire)[1:8],"_before")
   
+  #TODO: Proper fix
+  infra$mode[infra$mode == "Local"] <- "Road - Minor"
+  infra$mode[infra$mode == "Local road"] <- "Road - Minor"
+  
   # Estimate New mode splits
   mode_shifts <- NULL
   utils::data("mode_shifts", envir=environment())
@@ -207,11 +211,11 @@ estimate_travel_demand <- function(infra,
   # For cars special case as mode shift is bad if high
   # Worst case is the opposite
   if(md == "drive"){
-    desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_after-low")] + 
+    desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_after-low")] - 
       desire$total_shifted_travellers_high + desire[,paste0(md,"_induceddemand-high")]
-    desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_after-average")] + 
+    desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_after-average")] - 
       desire$total_shifted_travellers_average + desire[,paste0(md,"_induceddemand-average")]
-    desire[,paste0(md,"_after-high")] = desire[,paste0(md,"_after-high")] + 
+    desire[,paste0(md,"_after-high")] = desire[,paste0(md,"_after-high")] - 
       desire$total_shifted_travellers_low + desire[,paste0(md,"_induceddemand-low")]
   } else {
     desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_after-low")] - 
