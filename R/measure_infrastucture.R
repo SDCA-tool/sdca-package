@@ -115,15 +115,18 @@ measure_infrastucture <- function(infra,
       water_check$id = seq_len(nrow(water_check))
       water_check <- water_check[,c("id","message","type")]
       
-      # Cluster points so there are not too many
-      dist <- sf::st_distance(water_check)
-      dist <- matrix(as.numeric(dist), ncol = nrow(water_check))
+      if(nrow(water_check) > 1){
+        # Cluster points so there are not too many
+        dist <- sf::st_distance(water_check)
+        dist <- matrix(as.numeric(dist), ncol = nrow(water_check))
+        
+        # cluster all points using a hierarchical clustering approach
+        hc <- stats::hclust(stats::as.dist(dist), method="complete")
+        water_check$cluster <- stats::cutree(hc, h = 1000)
+        water_check <- water_check[!duplicated(water_check$cluster),]
+        water_check$cluster <- NULL
+      }
       
-      # cluster all points using a hierarchical clustering approach
-      hc <- stats::hclust(stats::as.dist(dist), method="complete")
-      water_check$cluster <- stats::cutree(hc, h = 1000)
-      water_check <- water_check[!duplicated(water_check$cluster),]
-      water_check$cluster <- NULL
     }
   } else {
     water_check <- NULL
