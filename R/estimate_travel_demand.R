@@ -20,12 +20,41 @@ estimate_travel_demand <- function(infra,
   desire = as.data.frame(desire)
   desire = sf::st_as_sf(desire, crs = 4326)
   
+  # Measure length
+  desire$length_km <- as.numeric(sf::st_length(desire)) / 1000
+  desire$id <- seq_len(nrow(desire))
+  
+  #If active travel only consider short desire lines
+  if(all(infra$mode_class %in% c("Active travel","onward_travel"))){
+    desire <- desire[desire$length_km < 5,]
+  }
+  
   # Split out Lines and non-lines
   infra_lines = infra[sf::st_geometry_type(infra$geometry) == "LINESTRING",]
-  infra_stops = infra[sf::st_geometry_type(infra$geometry) == "POINT",]
-  infra_stops = infra_stops[grepl("station",
-                                  infra_stops$intervention, 
+  infra_point = infra[sf::st_geometry_type(infra$geometry) == "POINT",]
+  infra_stops = infra_point[grepl("station",
+                                  infra_point$intervention, 
                                   ignore.case = TRUE),]
+  infra_point = infra_point[!grepl("station",
+                                   infra_point$intervention, 
+                                  ignore.case = TRUE),]
+  
+  # Options
+  # 1) - Just lines - work out along lines
+  # 2) - Lines and points where points are stations - Station mode doe demand between stations
+  # 3) - lines and non-station points - work out along lines and points add small bonus
+  
+  
+  if(nrow(infra_point) > 0){
+    # Point infrastructure but not a station - e.g. cycle parking
+    # Demand is to/from the point
+    point_buff = st_combine(st_buffer(infra_point, 200)) #TODO: set this objectively
+    desire_point = desire[point_buff,] #SOme just pass
+    desire_point_ends = st_cast(desire_point, "POINT")
+    desire_point_ends = desire_point_ends[point_buff,]
+    desire_point = desire_point[desire_point$id %in% desire_point_ends$id,]
+    desire_point$point = TRUE
+  }
   
   if(nrow(infra_stops) > 0){
     # Station Mode - Demand is between stations
@@ -46,10 +75,11 @@ estimate_travel_demand <- function(infra,
     #plot(desire$geometry)
     desire = desire[desire$from %in% desire_points$msoa &
                       desire$to %in% desire_points$msoa, ]
+    
     #plot(foo$geometry, col = "red", add = TRUE)
     #plot(buff_stops, add = TRUE)
     
-  } else {
+  } else if(nrow(infra_lines) > 0) {
     # Road Mode - Demand is along infrastructure
     
     
@@ -88,25 +118,33 @@ estimate_travel_demand <- function(infra,
     
   }
   
+  # COmbine point and line desires
+  if(exists("desire_point")){
+    if(nrow(desire_point) > 0){
+      if(nrow(infra_stops) == 0 & nrow(infra_lines) == 0){
+        desire = desire_point
+      } else {
+        desire$point = FALSE
+        desire = rbind(desire, desire_point)
+        desire = desire[order(desire$point),]
+        desire = desire[!duplicated(desire$id),]
+      }
+    }
+  }
+  
   # Check again for empty results
   if(nrow(desire) == 0){
     return(make_empty_demand())
   }
   
-  
-  desire$length_km <- as.numeric(sf::st_length(desire)) / 1000
   desire <- sf::st_drop_geometry(desire)
-  
-  #If active travel only consider short desire lines
-  if(all(infra$mode_class %in% c("Active travel","onward_travel"))){
-    desire <- desire[desire$length_km < 5,]
-  }
   
   desire$from <- NULL
   desire$to <- NULL
   desire$bearing <- NULL
   desire$parallel <- NULL
   desire$all <- NULL
+  desire$id <- NULL
   
   names(desire)[1:8] <- paste0(names(desire)[1:8],"_before")
   
@@ -118,13 +156,13 @@ estimate_travel_demand <- function(infra,
   
   #Loop over each mode
   for(md in c("walk","cycle","drive","passenger","rail","bus")){
-    induceddemand_low = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_low[mode_shifts$travel_mode == md]
-    induceddemand_average = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_average[mode_shifts$travel_mode == md]
-    induceddemand_high = desire[,paste0(md,"_before")] * mode_shifts$induceddemand_high[mode_shifts$travel_mode == md]
+    induceddemand_low = desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001, mode_shifts$induceddemand_low[mode_shifts$travel_mode == md])
+    induceddemand_average = desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001,mode_shifts$induceddemand_average[mode_shifts$travel_mode == md])
+    induceddemand_high = desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001,mode_shifts$induceddemand_high[mode_shifts$travel_mode == md])
     
-    modeshift_low = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_low[mode_shifts$travel_mode == md]
-    modeshift_average = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_average[mode_shifts$travel_mode == md]
-    modeshift_high = -desire[,paste0(md,"_before")] * mode_shifts$modeshift_high[mode_shifts$travel_mode == md]
+    modeshift_low = -desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001,mode_shifts$modeshift_low[mode_shifts$travel_mode == md])
+    modeshift_average = -desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001,mode_shifts$modeshift_average[mode_shifts$travel_mode == md])
+    modeshift_high = -desire[,paste0(md,"_before")] * dplyr::if_else(desire$point, 0.0001,mode_shifts$modeshift_high[mode_shifts$travel_mode == md])
     
     desire[,paste0(md,"_after-low")] = desire[,paste0(md,"_before")] + modeshift_low
     desire[,paste0(md,"_after-average")] = desire[,paste0(md,"_before")] + modeshift_average
@@ -205,6 +243,7 @@ estimate_travel_demand <- function(infra,
   }
 
   desire$length_km <- NULL
+  desire$point <- NULL
   
   # Total Emissions in kgco2e / year
   emissions_total <- dplyr::summarise_all(desire, .funs = sum, na.rm = TRUE)
