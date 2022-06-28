@@ -222,9 +222,15 @@ process_results = function(args, file = FALSE, local = FALSE) {
       if(is.infinite(ri)){
         ri <- 99
       }
+      if(is.na(ri)){
+        ri <- 99
+      }
       
       if(is.nan(b4pr)){
         b4pr <- 0
+      }
+      if(is.na(rdl)){
+        rdl <- 0
       }
       
       sub <- c(rep(0, ri - 1), b4pr)
