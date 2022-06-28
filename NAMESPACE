@@ -3,6 +3,7 @@
 export(cacualte_materials)
 export(cap_gradient)
 export(cut_fill)
+export(download_rasters)
 export(estimate_travel_demand)
 export(evaluate_landcover)
 export(extract_elevations)

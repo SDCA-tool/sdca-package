@@ -342,6 +342,11 @@ cap_gradient <- function(raster_data, max_gradient = 1.5){
 
   return(raster_data)
 }
+# raster_data$distance[1] <- 0
+# raster_data$cim_dist <- cumsum(raster_data$distance)
+# plot(raster_data$cim_dist, raster_data$elevation, type = "l",
+#      xlab = "Distance", ylab = "Elevation")
+# lines(raster_data$cim_dist, raster_data$road, col = "red")
 
 
 
