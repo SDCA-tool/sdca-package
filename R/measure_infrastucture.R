@@ -78,7 +78,7 @@ measure_infrastucture <- function(infra,
   infra <- sf::st_as_sf(infra, crs = 4326)
   
   # Step 1: Measure infrastructure and get data
-  if(st_geometry_type(infra) == "POINT"){
+  if(sf::st_geometry_type(infra) == "POINT"){
     infra$length <- 1
   } else {
     infra$length <- as.numeric(sf::st_length(infra))
