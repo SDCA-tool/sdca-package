@@ -10,10 +10,13 @@
 #' parse_json("jsonhere")
 #' }
 #' @export
-parse_json <- function(json, file = FALSE){
+parse_json <- function(json, file = FALSE, url = FALSE){
   if(file){
     dat <- jsonlite::read_json(json, simplifyVector = TRUE)
   } else {
+    if(url){
+      suppressWarnings(json <- readLines(json))
+    }
     dat <- jsonlite::fromJSON(json, simplifyVector = TRUE)
   }
   expected_names <- c("user_input","assets",
