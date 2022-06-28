@@ -45,13 +45,13 @@ cacualte_materials <- function(infra, combined, material_sites){
     sum(combined$no_granular_data_A4, na.rm = TRUE) * infra$length
   
   #B4 Assume same as construction * replacements
-  combined$B4 = combined$A4 * combined$replacements_during_lifetime
+  combined$B4 = (A1_3_emissions + A4_emissions) * combined$replacements_during_lifetime
   
   B4_emissions = sum(combined$B4, na.rm = TRUE) + 
     sum(combined$no_granular_data_B4, na.rm = TRUE) * infra$length
   
-  # B2 emissions - non granualr data only?
-  B2_emissions = sum(combined$no_granular_data_B4, na.rm = TRUE) * infra$length
+  # B2 emissions - non granular data only?
+  B2_emissions = sum(combined$no_granular_data_B2, na.rm = TRUE) * infra$length
   
   
   # Make Detailed Emission Table
