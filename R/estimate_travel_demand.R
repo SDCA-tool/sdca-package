@@ -5,6 +5,7 @@
 #' @param infra a sf dataframe of infrastucutre
 #' @param desire as sf dataframe of desire lines
 #' @param stop_buff_dist distance in metres to buffer stops
+#' @param point_buff_dist distance in metres to buffer points
 #' @param infra_buff_dist_ratio distance in metres to buffer infrastructure
 #' @return a dataframe of
 #' @export
@@ -12,6 +13,7 @@
 estimate_travel_demand <- function(infra, 
                                    desire, 
                                    stop_buff_dist = 3000,
+                                   point_buff_dist = 200,
                                    infra_buff_dist_ratio = 7){
   
   desire = desire[desire$from != desire$to, ]
@@ -48,7 +50,7 @@ estimate_travel_demand <- function(infra,
   if(nrow(infra_point) > 0){
     # Point infrastructure but not a station - e.g. cycle parking
     # Demand is to/from the point
-    point_buff = st_combine(st_buffer(infra_point, 200)) #TODO: set this objectively
+    point_buff = st_combine(st_buffer(infra_point, point_buff_dist))
     desire_point = desire[point_buff,] #SOme just pass
     desire_point_ends = st_cast(desire_point, "POINT")
     desire_point_ends = desire_point_ends[point_buff,]
@@ -78,6 +80,7 @@ estimate_travel_demand <- function(infra,
     
     #plot(foo$geometry, col = "red", add = TRUE)
     #plot(buff_stops, add = TRUE)
+    desire$point = FALSE
     
   } else if(nrow(infra_lines) > 0) {
     # Road Mode - Demand is along infrastructure
@@ -115,6 +118,7 @@ estimate_travel_demand <- function(infra,
     # plot(desire["parallel"])
     # plot(infra_lines$geometry, add = TRUE, col = "red", lwd = 3)
     desire <- desire[desire$parallel,]
+    desire$point = FALSE
     
   }
   

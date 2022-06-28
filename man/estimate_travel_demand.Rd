@@ -8,6 +8,7 @@ estimate_travel_demand(
   infra,
   desire,
   stop_buff_dist = 3000,
+  point_buff_dist = 200,
   infra_buff_dist_ratio = 7
 )
 }
@@ -17,6 +18,8 @@ estimate_travel_demand(
 \item{desire}{as sf dataframe of desire lines}
 
 \item{stop_buff_dist}{distance in metres to buffer stops}
+
+\item{point_buff_dist}{distance in metres to buffer points}
 
 \item{infra_buff_dist_ratio}{distance in metres to buffer infrastructure}
 }
