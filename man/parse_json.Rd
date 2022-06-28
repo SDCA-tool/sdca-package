@@ -4,7 +4,7 @@
 \alias{parse_json}
 \title{Parse JSON}
 \usage{
-parse_json(json, file = FALSE)
+parse_json(json, file = FALSE, url = FALSE)
 }
 \arguments{
 \item{json}{a json string as a character}
