@@ -58,11 +58,11 @@ cacualte_materials <- function(infra, combined, material_sites){
   combined = combined[,c("intervention","asset","item",
                          "quantity_total","input_unit.x",
                          "emissions_total","A4",
-                         "A5","B4")]
+                         "A5","B4","no_granular_data_A1_A3","no_granular_data_A4","no_granular_data_B2","no_granular_data_B4")]
   names(combined) = c("intervention","asset","item",
                       "quantity","quantity_units",
                       "A1_3","A4",
-                      "A5","B4")
+                      "A5","B4","no_granular_data_A1_A3","no_granular_data_A4","no_granular_data_B2","no_granular_data_B4")
   combined = combined[order(combined$A1_3, decreasing = TRUE),]
   
   headline = data.frame(A1_3_emissions = A1_3_emissions,
