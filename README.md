@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SDCA-tool/sdca-package/workflows/R-CMD-check/badge.svg)](https://github.com/SDCA-tool/sdca-package/actions)
@@ -13,7 +14,8 @@ The R Package for the SDCA Project
 
 Ensure you have system dependencies:
 
-`sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev libudunits2-dev libgdal-dev`
+`sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
+libudunits2-dev libgdal-dev`
 
 and R dependences:
 
@@ -37,8 +39,11 @@ the [website](dev.carbon.place), downloading the GeoJSON then.
 library(sdca)
 download_rasters() #first time only
 
-# Send a design to the API to get data
-dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
+# Path to the GeoJSON downloaded from website
+path <- "carbon-calculator-scheme-intervention.geojson"
+
+# Get data from the server
+dat <- geojson_api(path)
 
 # Process the input data using local = TRUE
 results <- process_results(dat, local = TRUE)

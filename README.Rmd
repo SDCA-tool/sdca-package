@@ -51,8 +51,11 @@ The primary use case of the package is working within the SDCA website. However 
 library(sdca)
 download_rasters() #first time only
 
-# Send a design to the API to get data
-dat <- geojson_api(path = "carbon-calculator-scheme-intervention.geojson")
+# Path to the GeoJSON downloaded from website
+path <- "carbon-calculator-scheme-intervention.geojson"
+
+# Get data from the server
+dat <- geojson_api(path)
 
 # Process the input data using local = TRUE
 results <- process_results(dat, local = TRUE)
