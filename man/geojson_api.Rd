@@ -7,16 +7,28 @@
 geojson_api(
   path,
   url = "https://dev.carbon.place/api/v1/locations.json?geojson=",
-  showinput = TRUE
+  showinput = TRUE,
+  path_dem = paste0(.libPaths()[1], "/sdca/exdata/UKdem.tif"),
+  path_landcover = paste0(.libPaths()[1], "/sdca/exdata/landcover.tif"),
+  path_bedrock = paste0(.libPaths()[1], "/sdca/exdata/bedrock.tif"),
+  path_superficial = paste0(.libPaths()[1], "/sdca/exdata/superficial.tif")
 )
 }
 \arguments{
-\item{path}{path to geojson}
+\item{path}{path to geojson downloaded from website}
 
 \item{url}{API url}
 
 \item{showinput}{logical, if TRUE input to R package is returned else resutls
 are returned}
+
+\item{path_dem}{path to the terrain raster, defaults to location set by `download_rasters()`}
+
+\item{path_landcover}{path to the land cover raster, defaults to location set by `download_rasters()`}
+
+\item{path_bedrock}{path to the bedrock raster, defaults to location set by `download_rasters()`}
+
+\item{path_superficial}{path to the superficial raster, defaults to location set by `download_rasters()`}
 }
 \value{
 a named list of data frames and other objects
