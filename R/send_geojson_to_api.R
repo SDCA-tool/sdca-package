@@ -20,7 +20,7 @@ geojson_api <- function(path,
   #json <- geojsonsf::geojson_sf(path)
   #json <- geojsonsf::sf_geojson(json)
   
-  json = readLines(path)
+  suppressWarnings(json <- readLines(path))
   json = gsub("\t","",json, fixed = TRUE)
   json = paste(json, collapse = "")
   json = utils::URLencode(json, reserved = TRUE)
