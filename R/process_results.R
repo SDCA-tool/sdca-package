@@ -209,7 +209,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
                               na.rm = TRUE), rep(0, 78))
   
   # Built up replacements over time
-  if(nrow(materials_itemised)){
+  if(nrow(materials_itemised) > 0){
     materials_itemised$B4_per_replacement <- materials_itemised$B4 / materials_itemised$replacements_during_lifetime
     materials_itemised$replacement_interval <- materials_itemised$asset_lifetime / materials_itemised$replacements_during_lifetime
     
