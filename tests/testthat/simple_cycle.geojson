@@ -1,0 +1,32 @@
+{
+	"_timestamp": 1656336277124,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 23,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Active travel",
+				"mode": "Bicycle",
+				"intervention_class": "New construction",
+				"intervention_name": "New stepped cycle lane",
+				"intervention": "cycle_lane_stepped"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						-2.601517,
+						51.453682
+					],
+					[
+						-2.551201,
+						51.524028
+					]
+				]
+			}
+		}
+	]
+}

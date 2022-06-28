@@ -52,7 +52,7 @@ estimate_travel_demand <- function(infra,
     # Demand is to/from the point
     point_buff = sf::st_combine(sf::st_buffer(infra_point, point_buff_dist))
     desire_point = desire[point_buff,] #SOme just pass
-    desire_point_ends = sf::st_cast(desire_point, "POINT")
+    suppressWarnings(desire_point_ends <- sf::st_cast(desire_point, "POINT"))
     desire_point_ends = desire_point_ends[point_buff,]
     desire_point = desire_point[desire_point$id %in% desire_point_ends$id,]
     desire_point$point = TRUE

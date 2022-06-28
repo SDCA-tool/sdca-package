@@ -1,0 +1,208 @@
+{
+	"_timestamp": 1656420173117,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 10,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Rail",
+				"mode": "High speed rail",
+				"intervention_class": "New construction",
+				"intervention_name": "New high speed line at grade",
+				"intervention": "hs_line_grade"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						-2.62503,
+						51.441435
+					],
+					[
+						-2.626151,
+						51.445234
+					],
+					[
+						-2.625664,
+						51.447878
+					],
+					[
+						-2.627809,
+						51.452224
+					],
+					[
+						-2.628736,
+						51.454655
+					],
+					[
+						-2.631464,
+						51.457077
+					],
+					[
+						-2.632049,
+						51.45887
+					],
+					[
+						-2.632342,
+						51.461726
+					],
+					[
+						-2.633463,
+						51.464521
+					],
+					[
+						-2.634926,
+						51.467042
+					],
+					[
+						-2.636779,
+						51.467997
+					],
+					[
+						-2.640339,
+						51.468665
+					],
+					[
+						-2.64463,
+						51.46982
+					],
+					[
+						-2.647165,
+						51.470883
+					],
+					[
+						-2.649506,
+						51.472432
+					],
+					[
+						-2.651651,
+						51.473981
+					],
+					[
+						-2.652329,
+						51.477597
+					],
+					[
+						-2.655596,
+						51.479814
+					],
+					[
+						-2.660277,
+						51.480786
+					],
+					[
+						-2.66369,
+						51.48033
+					],
+					[
+						-2.667543,
+						51.478387
+					],
+					[
+						-2.670322,
+						51.476868
+					],
+					[
+						-2.673296,
+						51.476716
+					],
+					[
+						-2.685924,
+						51.474683
+					],
+					[
+						-2.717037,
+						51.473819
+					],
+					[
+						-2.723391,
+						51.474977
+					],
+					[
+						-2.731371,
+						51.477583
+					],
+					[
+						-2.738111,
+						51.479706
+					],
+					[
+						-2.746014,
+						51.481153
+					],
+					[
+						-2.755389,
+						51.483083
+					],
+					[
+						-2.759108,
+						51.483759
+					]
+				]
+			}
+		},
+		{
+			"_interventionTypeIndex": 18,
+			"type": "Feature",
+			"id": 1,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Rail",
+				"mode": "High speed rail",
+				"intervention_class": "New construction",
+				"intervention_name": "Station - at grade",
+				"intervention": "hs_station_grade"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					-2.760967537847364,
+					51.48380719161247
+				]
+			}
+		},
+		{
+			"_interventionTypeIndex": 18,
+			"type": "Feature",
+			"id": 2,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Rail",
+				"mode": "High speed rail",
+				"intervention_class": "New construction",
+				"intervention_name": "Station - at grade",
+				"intervention": "hs_station_grade"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					-2.7226807477871375,
+					51.47547854421177
+				]
+			}
+		},
+		{
+			"_interventionTypeIndex": 18,
+			"type": "Feature",
+			"id": 3,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Rail",
+				"mode": "High speed rail",
+				"intervention_class": "New construction",
+				"intervention_name": "Station - at grade",
+				"intervention": "hs_station_grade"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					-2.62335375146813,
+					51.440466625201026
+				]
+			}
+		}
+	]
+}

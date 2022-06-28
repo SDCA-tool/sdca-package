@@ -4,7 +4,7 @@
 #'
 #' @param json a json string as a character
 #' @param file logical, if TRUE json is passed as path to a file. Else assumed to contain json
-#' @url logical, if TRUE json is treated as a URL from the API
+#' @param url logical, if TRUE json is treated as a URL from the API
 #' @return a named list of data frames and other objects
 #' @examples
 #' \dontrun{

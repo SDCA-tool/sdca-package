@@ -10,6 +10,8 @@ parse_json(json, file = FALSE, url = FALSE)
 \item{json}{a json string as a character}
 
 \item{file}{logical, if TRUE json is passed as path to a file. Else assumed to contain json}
+
+\item{url}{logical, if TRUE json is treated as a URL from the API}
 }
 \value{
 a named list of data frames and other objects
