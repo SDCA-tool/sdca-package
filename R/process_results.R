@@ -198,22 +198,83 @@ process_results = function(args, file = FALSE, local = FALSE) {
   pas2080$emissions_high <- dplyr::if_else(pas2080$emissions_high > 2,round(pas2080$emissions_high), round(pas2080$emissions_high, 2))
   pas2080$emissions_low <- dplyr::if_else(pas2080$emissions_low > 2,round(pas2080$emissions_low), round(pas2080$emissions_low, 2))
   
-  timeseries <- data.frame(year = 2022:2100,
-                           emissions = round(c(sum(emissions[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net/1000,
-                                         rep(res_demand$emissions_net/1000, 78))),
-                           emissions_low = round(c(sum(emissions_low[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_low/1000,
-                                               rep(res_demand$emissions_net_low/1000, 78))),
-                           emissions_high = round(c(sum(emissions_high[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_high/1000,
-                                               rep(res_demand$emissions_net_high/1000, 78))))
+  
+  # Build Time Series
+  timeseries <- data.frame(year = 2022:2100)
+  timeseries$upfront <- c(sum(pas2080$emissions[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], 
+                              na.rm = TRUE), rep(0, 78))
+  timeseries$upfront_low <- c(sum(pas2080$emissions_low[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], 
+                              na.rm = TRUE), rep(0, 78))
+  timeseries$upfront_high <- c(sum(pas2080$emissions_high[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], 
+                              na.rm = TRUE), rep(0, 78))
+  
+  # Built up replacements over time
+  if(nrow(materials_itemised)){
+    materials_itemised$B4_per_replacement <- materials_itemised$B4 / materials_itemised$replacements_during_lifetime
+    materials_itemised$replacement_interval <- materials_itemised$asset_lifetime / materials_itemised$replacements_during_lifetime
+    
+    B4_series <- list()
+    for(i in seq_len(nrow(materials_itemised))){
+      ri <- materials_itemised$replacement_interval[i]
+      b4pr <- materials_itemised$B4_per_replacement[i]
+      rdl <- materials_itemised$replacements_during_lifetime[i]
+      
+      if(is.infinite(ri)){
+        ri <- 99
+      }
+      
+      if(is.nan(b4pr)){
+        b4pr <- 0
+      }
+      
+      sub <- c(rep(0, ri - 1), b4pr)
+      if(rdl > 0){
+        sub <- rep(sub, rdl)
+      }
+      
+      sub <- sub[1:79]
+      B4_series[[i]] <- sub
+    }
+    
+    B4_series <- simplify2array(B4_series)
+    B4_series <- rowSums(B4_series) / 1000
+    
+    timeseries$B4 <- B4_series
+    
+  } else {
+    timeseries$B4 <- pas2080$emissions[pas2080$pas2080_code == "B4"] / 79
+  }
+  
+  timeseries$B2 <- pas2080$emissions[pas2080$pas2080_code == "B2"] / 79
+  
+  # Demand Emissions
+  timeseries$demand_emissions <- rep(res_demand$emissions_net/1000, 79)
+  timeseries$demand_emissions_low <- rep(res_demand$emissions_net_low/1000, 79)
+  timeseries$demand_emissions_high <- rep(res_demand$emissions_net_high/1000, 79)
+  
+  #Add up
+  timeseries$emissions <- timeseries$upfront + timeseries$B2 + timeseries$B4 + timeseries$demand_emissions
+  timeseries$emissions_low <- timeseries$upfront_low + timeseries$B2 + timeseries$B4 + timeseries$demand_emissions_low
+  timeseries$emissions_high <- timeseries$upfront_high + timeseries$B2 + timeseries$B4 + timeseries$demand_emissions_high
+  
+  # timeseries <- data.frame(year = 2022:2100,
+  #                          emissions = round(c(sum(emissions[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net/1000,
+  #                                        rep(res_demand$emissions_net/1000, 78))),
+  #                          emissions_low = round(c(sum(emissions_low[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_low/1000,
+  #                                              rep(res_demand$emissions_net_low/1000, 78))),
+  #                          emissions_high = round(c(sum(emissions_high[c(1:11,13:16)], na.rm = TRUE) - res_demand$emissions_net_high/1000,
+  #                                              rep(res_demand$emissions_net_high/1000, 78))))
+  timeseries <- timeseries[,c("year","emissions","emissions_low","emissions_high")]
+  
   timeseries$emissions_cumulative <- cumsum(timeseries$emissions)
   timeseries$emissions_cumulative_low <- cumsum(timeseries$emissions_low)
   timeseries$emissions_cumulative_high <- cumsum(timeseries$emissions_high)
   
   # Headline Results
   
-  emissions_upfront <- sum(pas2080$emissions[1:4], na.rm = TRUE)
-  emissions_upfront_low <- sum(pas2080$emissions_low[1:4], na.rm = TRUE)
-  emissions_upfront_high <- sum(pas2080$emissions_high[1:4], na.rm = TRUE)
+  emissions_upfront <- sum(pas2080$emissions[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], na.rm = TRUE)
+  emissions_upfront_low <- sum(pas2080$emissions_low[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], na.rm = TRUE)
+  emissions_upfront_high <- sum(pas2080$emissions_high[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5")], na.rm = TRUE)
   
   emissions_whole_life <- sum(pas2080$emissions, na.rm = TRUE)
   emissions_whole_life_low <- sum(pas2080$emissions_low, na.rm = TRUE)
@@ -224,11 +285,11 @@ process_results = function(args, file = FALSE, local = FALSE) {
   emissions_whole_life_benefits_high <- sum(timeseries$emissions_high, na.rm = TRUE)
   
   
-  payback_time <- round(sum(emissions[c(1:11,13:16)], na.rm = TRUE) / 
+  payback_time <- round(sum(pas2080$emissions[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5","B2","B4")], na.rm = TRUE) / 
                           ( - res_demand$emissions_net/1000))
-  payback_time_low <- round(sum(emissions_low[c(1:11,13:16)], na.rm = TRUE) / 
+  payback_time_low <- round(sum(emissions_low[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5","B2","B4")], na.rm = TRUE) / 
                           ( - res_demand$emissions_net_low/1000))
-  payback_time_high <- round(sum(emissions_high[c(1:11,13:16)], na.rm = TRUE) / 
+  payback_time_high <- round(sum(emissions_high[pas2080$pas2080_code %in% c("A0","A1-3","A4","A5","B2","B4")], na.rm = TRUE) / 
                               ( - res_demand$emissions_net_high/1000))
   
   
@@ -236,10 +297,10 @@ process_results = function(args, file = FALSE, local = FALSE) {
     payback_time <- "Never"
   }
   if(payback_time_low < 0){
-    payback_time <- "Never"
+    payback_time_low <- "Never"
   }
   if(payback_time_high < 0){
-    payback_time <- "Never"
+    payback_time_high <- "Never"
   }
   
   if(is.character(payback_time)){

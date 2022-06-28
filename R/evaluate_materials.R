@@ -45,7 +45,9 @@ cacualte_materials <- function(infra, combined, material_sites){
     sum(combined$no_granular_data_A4, na.rm = TRUE) * infra$length
   
   #B4 Assume same as construction * replacements
-  combined$B4 = (A1_3_emissions + A4_emissions) * combined$replacements_during_lifetime
+  combined$B4_granular = (combined$emissions_total + combined$A4) * combined$replacements_during_lifetime
+  combined$B4_non_granular =  (combined$no_granular_data_A1_A3 * infra$length) * combined$replacements_during_lifetime
+  combined$B4 = rowSums(combined[,c("B4_granular", "B4_non_granular")], na.rm=TRUE)
   
   B4_emissions = sum(combined$B4, na.rm = TRUE) + 
     sum(combined$no_granular_data_B4, na.rm = TRUE) * infra$length
@@ -58,11 +60,15 @@ cacualte_materials <- function(infra, combined, material_sites){
   combined = combined[,c("intervention","asset","item",
                          "quantity_total","input_unit.x",
                          "emissions_total","A4",
-                         "A5","B4","no_granular_data_A1_A3","no_granular_data_A4","no_granular_data_B2","no_granular_data_B4")]
+                         "A5","B4","no_granular_data_A1_A3",
+                         "no_granular_data_A4","no_granular_data_B2",
+                         "no_granular_data_B4","replacements_during_lifetime","asset_lifetime")]
   names(combined) = c("intervention","asset","item",
                       "quantity","quantity_units",
                       "A1_3","A4",
-                      "A5","B4","no_granular_data_A1_A3","no_granular_data_A4","no_granular_data_B2","no_granular_data_B4")
+                      "A5","B4","no_granular_data_A1_A3","no_granular_data_A4",
+                      "no_granular_data_B2","no_granular_data_B4",
+                      "replacements_during_lifetime","asset_lifetime")
   combined = combined[order(combined$A1_3, decreasing = TRUE),]
   
   headline = data.frame(A1_3_emissions = A1_3_emissions,
