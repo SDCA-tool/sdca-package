@@ -65,18 +65,25 @@ measure_infrastucture <- function(infra,
     return(results)
   }
   
-  # TODO: Not all lines nead cut_fill add logic
+  # TODO: Not all lines need cut_fill add logic
   if(any(grepl("cutting", infra$intervention),grepl("embankment", infra$intervention))){
     do_cut_fill <- TRUE
   } else {
     do_cut_fill <- FALSE
   }
   
-  # Step 1: Measure infrastructure and get data
+  
   # R 3.6 Bug?
   infra <- as.data.frame(infra)
   infra <- sf::st_as_sf(infra, crs = 4326)
-  infra$length <- as.numeric(sf::st_length(infra))
+  
+  # Step 1: Measure infrastructure and get data
+  if(st_geometry_type(infra) == "POINT"){
+    infra$length <- 1
+  } else {
+    infra$length <- as.numeric(sf::st_length(infra))
+  }
+  
   
   #TODO; Get correct with of infrastructure
   if("data.frame" %in% class(assets_parameters)){
@@ -89,7 +96,6 @@ measure_infrastucture <- function(infra,
   } else {
     infra$width = 19
   }
-  
   
   # Get data from the rasters
   infra_data <- extract_rasters(infra, 
