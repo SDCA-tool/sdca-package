@@ -33,7 +33,7 @@ remotes::install_github("SDCA-tool/sdca-package")
 
 The primary use case of the package is working within the SDCA website.
 However users can test the code locally by drawing an intervention on
-the [website](dev.carbon.place), downloading the GeoJSON then.
+the [website](https://dev.carbon.place/), downloading the GeoJSON then.
 
 ``` r
 library(sdca)
