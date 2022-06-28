@@ -155,6 +155,7 @@ estimate_travel_demand <- function(infra,
   #TODO: Proper fix
   infra$mode[infra$mode == "Local"] <- "Road - Minor"
   infra$mode[infra$mode == "Local road"] <- "Road - Minor"
+  infra$mode[infra$mode == "Foot"] <- "Walking"
   
   # Estimate New mode splits
   mode_shifts <- NULL
