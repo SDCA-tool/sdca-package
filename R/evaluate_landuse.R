@@ -9,6 +9,11 @@
 
 evaluate_landcover <- function(infra_data, width = 19){
   
+  # Check input
+  if(is.na(width)){
+    width <- 1
+  }
+  
   # Identify climate Zones
   utils::data("climate_zones", envir=environment())
   
@@ -20,7 +25,11 @@ evaluate_landcover <- function(infra_data, width = 19){
   # TODO: We also do this for the cut/fill so wasted computation
   coords <- sf::st_coordinates(infra_data)
   infra_data <- sf::st_drop_geometry(infra_data)
-  infra_data$distance <- geodist::geodist(coords, sequential = TRUE, pad = TRUE)
+  if(nrow(infra_data) > 1){
+    infra_data$distance <- geodist::geodist(coords, sequential = TRUE, pad = TRUE)
+  } else {
+    infra_data$distance <- 1
+  }
   
   # Calculate emissions
   infra_data$landcover_emissions <- ifelse(infra_data$warm_climate,
