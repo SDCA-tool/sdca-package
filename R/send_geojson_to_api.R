@@ -53,22 +53,22 @@ geojson_api <- function(path,
   if(file.exists(path_dem)){
     dat$path_dem <- path_dem
   } else{
-    warning("could not find terrain raster")
+    warning("could not find terrain raster\n")
   }
   if(file.exists(path_landcover)){
     dat$path_landcover <- path_landcover
   } else{
-    warning("could not find land cover raster")
+    warning("could not find land cover raster\n")
   }
   if(file.exists(path_bedrock)){
     dat$path_bedrock <- path_bedrock
   } else{
-    warning("could not find bedrock raster")
+    warning("could not find bedrock raster\n")
   }
   if(file.exists(path_superficial)){
     dat$path_superficial <- path_superficial
   } else{
-    warning("could not find superficial raster")
+    warning("could not find superficial raster\n")
   }
 
   return(dat)
