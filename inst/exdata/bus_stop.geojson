@@ -1,0 +1,26 @@
+{
+	"_timestamp": 1656448286336,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 40,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Road",
+				"mode": "Bus",
+				"intervention_class": "New construction",
+				"intervention_name": "New bus stop",
+				"intervention": "bus_stop"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					-0.24465423528570795,
+					52.56991605362222
+				]
+			}
+		}
+	]
+}

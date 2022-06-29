@@ -1,0 +1,36 @@
+{
+	"_timestamp": 1656454043236,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 22,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Active travel",
+				"mode": "Bicycle",
+				"intervention_class": "New construction",
+				"intervention_name": "New segregated cycle lane",
+				"intervention": "cycle_lane_segregated"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						0.123643,
+						52.222867
+					],
+					[
+						0.127395,
+						52.180325
+					],
+					[
+						0.133023,
+						52.152708
+					]
+				]
+			}
+		}
+	]
+}

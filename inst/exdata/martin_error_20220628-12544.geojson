@@ -1,0 +1,32 @@
+{
+	"_timestamp": 1656417237609,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 0,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Rail",
+				"mode": "Rail",
+				"intervention_class": "New construction",
+				"intervention_name": "Overbridge - flyover road",
+				"intervention": "rail_overbridge_flyover_road"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						0.488495,
+						51.767817
+					],
+					[
+						0.559514,
+						51.822617
+					]
+				]
+			}
+		}
+	]
+}

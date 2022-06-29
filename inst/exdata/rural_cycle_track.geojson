@@ -1,0 +1,32 @@
+{
+	"_timestamp": 1656441542091,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 25,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Active travel",
+				"mode": "Bicycle",
+				"intervention_class": "New construction",
+				"intervention_name": "New rural cycle track",
+				"intervention": "cycle_track_rural"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[
+						0.195123,
+						52.056668
+					],
+					[
+						0.14769,
+						52.15917
+					]
+				]
+			}
+		}
+	]
+}

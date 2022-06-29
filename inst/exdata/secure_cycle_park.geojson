@@ -1,0 +1,26 @@
+{
+	"_timestamp": 1656460301193,
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"_interventionTypeIndex": 31,
+			"type": "Feature",
+			"id": 0,
+			"properties": {
+				"infrastructure_type": "transport",
+				"mode_class": "Active travel",
+				"mode": "Bicycle",
+				"intervention_class": "New construction",
+				"intervention_name": "New secure cycle parking",
+				"intervention": "cycle_secure_parking"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					0.13916429057897517,
+					52.20133031091751
+				]
+			}
+		}
+	]
+}
