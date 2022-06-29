@@ -211,7 +211,7 @@ process_results = function(args, file = FALSE, local = FALSE) {
   # Built up replacements over time
   if(nrow(materials_itemised) > 0){
     materials_itemised$B4_per_replacement <- materials_itemised$B4 / materials_itemised$replacements_during_lifetime
-    materials_itemised$replacement_interval <- materials_itemised$asset_lifetime / materials_itemised$replacements_during_lifetime
+    materials_itemised$replacement_interval <- materials_itemised$asset_lifetime / (materials_itemised$replacements_during_lifetime + 1)
     
     B4_series <- list()
     for(i in seq_len(nrow(materials_itemised))){
