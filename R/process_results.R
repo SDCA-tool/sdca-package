@@ -140,13 +140,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
                   cut_fill_emissions_total$carbon_fill,
-                0,
+                NA,
                 material_emissions_total$B2_emissions,
-                0,
+                NA,
                 material_emissions_total$B4_emissions,
-                0,0,0,0,
+                NA,NA,NA,NA,
                 res_demand$emissions_increase,
-                0,0,0,0)
+                NA,NA,NA,NA)
   
   emissions_low = c(landcover_emissions_total$emissions_total,
                      material_emissions_total$A1_3_emissions,
@@ -155,13 +155,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
                   cut_fill_emissions_total$carbon_fill,
-                0,
+                NA,
                 material_emissions_total$B2_emissions,
-                0,
+                NA,
                 material_emissions_total$B4_emissions,
-                0,0,0,0,
+                NA,NA,NA,NA,
                 res_demand$emissions_increase_low,
-                0,0,0,0)
+                NA,NA,NA,NA)
   
   emissions_high = c(landcover_emissions_total$emissions_total,
                       material_emissions_total$A1_3_emissions,
@@ -170,13 +170,13 @@ process_results = function(args, file = FALSE, local = FALSE) {
                   cut_fill_emissions_total$carbon_cut +
                   cut_fill_emissions_total$carbon_processing +
                   cut_fill_emissions_total$carbon_fill,
-                0,
+                NA,
                 material_emissions_total$B2_emissions,
-                0,
+                NA,
                 material_emissions_total$B4_emissions,
-                0,0,0,0,
+                NA,NA,NA,NA,
                 res_demand$emissions_increase_high,
-                0,0,0,0)
+                NA,NA,NA,NA)
   
   emissions <- emissions / 1000 # COnvert to Tonnes CO2 for output
   emissions_low <- emissions_low / 1000
